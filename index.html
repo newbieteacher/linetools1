@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LINE貼圖裁切工具</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    body{font-family:"Microsoft JhengHei",sans-serif;background:#f4f7fb;margin:0;color:#222;font-size:20px}
+    header{background:#1e293b;color:white;padding:30px;position:relative;display:flex;justify-content:space-between;align-items:center}
+    .header-left h1{margin:0;font-size:48px;font-weight:bold}
+    .header-left p{margin:8px 0 0 0;font-size:28px;color:#cbd5e1}
+    .version{position:absolute;top:20px;right:30px;background:#ff6b35;color:white;padding:12px 24px;border-radius:12px;font-size:24px;font-weight:bold}
+    .box{max-width:1200px;margin:24px auto;background:white;border-radius:20px;padding:30px;box-shadow:0 10px 30px #0001}
+    .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:30px}
+    .step{background:#e0f2fe;padding:18px;border-radius:14px;text-align:center;font-weight:bold;font-size:20px;color:#0369a1}
+    .controls-section{background:#f8fafc;padding:24px;border-radius:16px;margin-bottom:24px;border:3px solid #e2e8f0}
+    .controls-section h2{margin:0 0 20px 0;font-size:28px;color:#1e293b}
+    .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
+    .controls.four{grid-template-columns:repeat(4,1fr)}
+    .control-group{display:flex;flex-direction:column}
+    label{font-weight:bold;font-size:22px;margin-bottom:10px;color:#1e293b}
+    input,select{font-size:20px;padding:16px;border-radius:12px;border:2px solid #cbd5e1;width:100%;box-sizing:border-box;font-family:"Microsoft JhengHei",sans-serif}
+    input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+    .toggle-switch{display:flex;align-items:center;gap:20px;margin-bottom:20px}
+    .switch{display:inline-flex;align-items:center;width:80px;height:44px;background:#cbd5e1;border-radius:22px;padding:3px;cursor:pointer;transition:background 0.3s}
+    .switch.active{background:#2563eb}
+    .switch-knob{width:38px;height:38px;background:white;border-radius:50%;transition:transform 0.3s}
+    .switch.active .switch-knob{transform:translateX(36px)}
+    .button-group{display:flex;gap:16px;margin-top:24px;flex-wrap:wrap}
+    button{font-size:22px;padding:20px 32px;border-radius:14px;border:0;font-weight:bold;cursor:pointer;font-family:"Microsoft JhengHei",sans-serif;transition:all 0.2s}
+    .btn-primary{background:#2563eb;color:white}
+    .btn-primary:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 5px 15px rgba(37,99,235,0.3)}
+    .btn-success{background:#16a34a;color:white}
+    .btn-success:hover{background:#15803d;transform:translateY(-2px);box-shadow:0 5px 15px rgba(22,163,74,0.3)}
+    .btn-secondary{background:#6366f1;color:white}
+    .btn-secondary:hover{background:#4f46e5;transform:translateY(-2px);box-shadow:0 5px 15px rgba(99,102,241,0.3)}
+    .preview{display:flex;gap:30px;flex-wrap:wrap;margin-top:30px;align-items:flex-start}
+    .preview-left{flex:0 0 auto}
+    .preview-right{flex:1;min-width:400px}
+    h2{font-size:26px;margin:0 0 20px 0;color:#1e293b}
+    canvas{background:
+      linear-gradient(45deg,#ddd 25%,transparent 25%),
+      linear-gradient(-45deg,#ddd 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,#ddd 75%),
+      linear-gradient(-45deg,transparent 75%,#ddd 75%);
+      background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;
+      border:8px solid white;box-shadow:0 5px 20px #0002;border-radius:16px;max-width:100%;height:auto}
+    .grid{display:grid;gap:8px;margin-top:20px}
+    .cell{background:#e5e7eb;border:3px solid transparent;border-radius:10px;padding:14px;text-align:center;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s}
+    .cell:hover{background:#d1d5db}
+    .cell.active{background:#bfdbfe;border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,0.2)}
+    .note{font-size:20px;color:#555;line-height:2}
+    .info-box{background:#dbeafe;border-left:5px solid #2563eb;padding:20px;border-radius:8px;margin:20px 0}
+    .input-helper{font-size:16px;color:#666;margin-top:6px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <h1>簡老師電腦班</h1>
+    <p>LINE貼圖裁切工具</p>
+    <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal">一張總表，自動切成多張透明 PNG</p>
+  </div>
+  <div class="version">V1.0 教學版</div>
+</header>
+
+<div class="box">
+  <div class="steps">
+    <div class="step">1 上傳總表</div>
+    <div class="step">2 設定行列</div>
+    <div class="step">3 去背設定</div>
+    <div class="step">4 預覽</div>
+    <div class="step">5 下載 ZIP</div>
+  </div>
+
+  <!-- 步驟 1 & 2：上傳與基本設定 -->
+  <div class="controls-section">
+    <h2>步驟 1-2：上傳圖片與基本設定</h2>
+    <div class="controls four">
+      <div class="control-group">
+        <label>📤 上傳圖片</label>
+        <input type="file" id="file" accept="image/*">
+        <div class="input-helper">支援 PNG、JPG 等圖片格式</div>
+      </div>
+      <div class="control-group">
+        <label>📊 欄數（橫向）</label>
+        <input type="number" id="cols" value="4" min="1" max="10">
+      </div>
+      <div class="control-group">
+        <label>📊 列數（縱向）</label>
+        <input type="number" id="rows" value="3" min="1" max="10">
+      </div>
+      <div class="control-group">
+        <label>📐 輸出尺寸</label>
+        <select id="size">
+          <option value="370,320,sticker">貼圖本體 370×320</option>
+          <option value="240,240,main">主圖封面 240×240</option>
+          <option value="96,74,tab">標籤圖 96×74</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 步驟 3：去背設定 -->
+  <div class="controls-section">
+    <h2>步驟 3：去背設定</h2>
+    
+    <div class="toggle-switch">
+      <label style="margin-bottom:0">🎨 啟用去背模式（變透明）</label>
+      <div class="switch" id="bgRemoveToggle">
+        <div class="switch-knob"></div>
+      </div>
+      <span id="bgRemoveStatus" style="font-size:20px;color:#666">未啟用</span>
+    </div>
+
+    <div id="bgRemoveSettings" style="display:none;background:#fff;padding:20px;border-radius:12px;border:2px solid #2563eb;margin-top:20px">
+      <div class="controls">
+        <div class="control-group">
+          <label>🎯 去背容差（值越大範圍越廣）</label>
+          <input type="range" id="tolerance" min="1" max="150" value="30" 
+                 style="padding:0;height:30px;cursor:pointer;border:none">
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px">
+            <span>1</span>
+            <span style="font-weight:bold;color:#2563eb">值：<span id="toleranceValue">30</span></span>
+            <span>150</span>
+          </div>
+          <div class="input-helper">數值越小去背效果越精準，但可能有遺漏</div>
+        </div>
+
+        <div class="control-group">
+          <label>🎨 選擇去背顏色</label>
+          <input type="color" id="bgColor" value="#ffffff" style="height:60px;cursor:pointer">
+          <div class="input-helper">點選要去除的顏色</div>
+        </div>
+
+        <div class="control-group">
+          <label>📝 檔名前置文字</label>
+          <input type="text" id="prefix" value="貼圖" maxlength="10" placeholder="例：貼圖 或 sticker">
+          <div class="input-helper">中文最多 3 字，英文最多 6 字</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 步驟 4 & 5：預覽與下載 -->
+  <div class="preview">
+    <div class="preview-left">
+      <h2>步驟 4：預覽目前這一張</h2>
+      <canvas id="canvas" width="370" height="320"></canvas>
+      <div style="margin-top:20px">
+        <button class="btn-primary" onclick="saveToMobile()" style="width:100%;margin-bottom:12px">
+          📱 手機儲存這張
+        </button>
+        <button class="btn-secondary" onclick="shareImage()" style="width:100%">
+          ✈️ 分享這張圖片
+        </button>
+      </div>
+      <div class="info-box" style="margin-top:20px;font-size:18px;padding:16px">
+        <strong>📲 儲存提醒：</strong><br>
+        • <strong>iPhone</strong>：可能存到「檔案」，再手動存到相簿<br>
+        • <strong>Android</strong>：通常存在「下載」資料夾
+      </div>
+    </div>
+
+    <div class="preview-right">
+      <h2>工具說明</h2>
+      <div class="info-box">
+        <p class="note">
+          ✨ 此工具專為 LINE 貼圖課設計<br><br>
+          📋 <strong>使用步驟：</strong><br>
+          1. 把貼圖排成一張總表（例如 4欄 × 3列）<br>
+          2. 上傳總表圖片<br>
+          3. 設定去背與檔名<br>
+          4. 點選格子預覽<br>
+          5. 一鍵下載全部 ZIP<br><br>
+          💡 <strong>去背小提示：</strong><br>
+          去背模式會把背景變透明，輸出 PNG 格式。<br>
+          調整容差值來微調去背效果。
+        </p>
+      </div>
+
+      <h2>步驟 5：整批下載</h2>
+      <button class="btn-success" onclick="downloadZip()" style="width:100%">
+        🎁 整批下載 ZIP（電腦推薦）
+      </button>
+      <div class="input-helper" style="margin-top:12px">
+        所有裁切後的貼圖會自動打包成 ZIP 檔下載
+      </div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:40px">選擇要預覽的格子</h2>
+  <div id="grid" class="grid"></div>
+</div>
+
+<script>
+let img = null;
+let selected = 0;
+let enableBgRemove = false;
+
+const file = document.getElementById("file");
+const colsInput = document.getElementById("cols");
+const rowsInput = document.getElementById("rows");
+const sizeSelect = document.getElementById("size");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const grid = document.getElementById("grid");
+const bgRemoveToggle = document.getElementById("bgRemoveToggle");
+const bgRemoveSettings = document.getElementById("bgRemoveSettings");
+const bgRemoveStatus = document.getElementById("bgRemoveStatus");
+const toleranceInput = document.getElementById("tolerance");
+const toleranceValue = document.getElementById("toleranceValue");
+const bgColorInput = document.getElementById("bgColor");
+const prefixInput = document.getElementById("prefix");
+
+// 去背開關事件
+bgRemoveToggle.addEventListener("click", () => {
+  enableBgRemove = !enableBgRemove;
+  bgRemoveToggle.classList.toggle("active");
+  bgRemoveStatus.textContent = enableBgRemove ? "已啟用" : "未啟用";
+  bgRemoveStatus.style.color = enableBgRemove ? "#16a34a" : "#666";
+  bgRemoveSettings.style.display = enableBgRemove ? "block" : "none";
+  draw();
+});
+
+// 容差滑桿事件
+toleranceInput.addEventListener("input", () => {
+  toleranceValue.textContent = toleranceInput.value;
+  draw();
+});
+
+// 顏色選擇事件
+bgColorInput.addEventListener("change", draw);
+
+file.addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    img = new Image();
+    img.onload = () => {
+      selected = 0;
+      buildGrid();
+      draw();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(f);
+});
+
+colsInput.oninput = buildGrid;
+rowsInput.oninput = buildGrid;
+sizeSelect.onchange = () => {
+  const [w,h] = sizeSelect.value.split(",");
+  canvas.width = Number(w);
+  canvas.height = Number(h);
+  draw();
+};
+
+function buildGrid(){
+  const cols = Number(colsInput.value);
+  const rows = Number(rowsInput.value);
+  grid.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+  grid.innerHTML = "";
+  for(let i=0;i<cols*rows;i++){
+    const div = document.createElement("div");
+    div.className = "cell" + (i===selected ? " active" : "");
+    div.textContent = (i + 1);
+    div.onclick = () => {
+      selected = i;
+      buildGrid();
+      draw();
+    };
+    grid.appendChild(div);
+  }
+  draw();
+}
+
+function getInfo(){
+  const cols = Number(colsInput.value);
+  const rows = Number(rowsInput.value);
+  const [w,h,prefix] = sizeSelect.value.split(",");
+  return {cols, rows, w:Number(w), h:Number(h), prefix};
+}
+
+// 顏色相似度檢查（用於去背）
+function colorDistance(c1, c2) {
+  const dr = c1[0] - c2[0];
+  const dg = c1[1] - c2[1];
+  const db = c1[2] - c2[2];
+  return Math.sqrt(dr*dr + dg*dg + db*db);
+}
+
+// 將 hex 顏色轉為 RGB 陣列
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? [
+    parseInt(result[1], 16),
+    parseInt(result[2], 16),
+    parseInt(result[3], 16)
+  ] : [255, 255, 255];
+}
+
+function drawTo(targetCanvas, index){
+  if(!img) return;
+  const {cols, rows, w, h} = getInfo();
+  targetCanvas.width = w;
+  targetCanvas.height = h;
+  const c = targetCanvas.getContext("2d");
+  
+  // 清除背景
+  if(enableBgRemove) {
+    c.clearRect(0, 0, w, h);
+  } else {
+    c.fillStyle = "white";
+    c.fillRect(0, 0, w, h);
+  }
+
+  const cellW = img.width / cols;
+  const cellH = img.height / rows;
+  const col = index % cols;
+  const row = Math.floor(index / cols);
+  const sx = col * cellW;
+  const sy = row * cellH;
+
+  const scale = Math.min(w / cellW, h / cellH);
+  const dw = cellW * scale;
+  const dh = cellH * scale;
+  const dx = (w - dw) / 2;
+  const dy = (h - dh) / 2;
+
+  c.drawImage(img, sx, sy, cellW, cellH, dx, dy, dw, dh);
+
+  // 去背處理
+  if(enableBgRemove) {
+    const imageData = c.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    const bgColor = hexToRgb(bgColorInput.value);
+    const tolerance = Number(toleranceInput.value);
+
+    for(let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i+1];
+      const b = data[i+2];
+      const dist = colorDistance([r,g,b], bgColor);
+      
+      if(dist < tolerance) {
+        data[i+3] = 0; // 設定 alpha 為 0（透明）
+      }
+    }
+    
+    c.putImageData(imageData, 0, 0);
+  }
+}
+
+function draw(){
+  drawTo(canvas, selected);
+}
+
+function filename(index){
+  const customPrefix = prefixInput.value.trim() || "貼圖";
+  return `${customPrefix}${String(index+1).padStart(2,"0")}.png`;
+}
+
+// 獲取 Canvas 為 Blob
+async function canvasToBlob(canvasElement) {
+  return new Promise(resolve => {
+    canvasElement.toBlob(resolve, "image/png");
+  });
+}
+
+function saveToMobile(){
+  if(!img) return alert("❌ 請先上傳圖片");
+  draw();
+  const a = document.createElement("a");
+  a.download = filename(selected);
+  a.href = canvas.toDataURL("image/png");
+  a.click();
+}
+
+async function shareImage(){
+  if(!img) return alert("❌ 請先上傳圖片");
+  
+  draw();
+  
+  // 檢查瀏覽器是否支援 Web Share API
+  if(navigator.share) {
+    try {
+      // 轉換 canvas 為 blob
+      const blob = await canvasToBlob(canvas);
+      const file = new File([blob], filename(selected), { type: "image/png" });
+      
+      // 使用 Web Share API
+      await navigator.share({
+        files: [file],
+        title: "LINE貼圖",
+        text: "分享我用裁切工具製作的貼圖"
+      });
+    } catch(err) {
+      if(err.name !== "AbortError") {
+        console.error("分享失敗:", err);
+        alert("❌ 分享失敗，請改用下載功能");
+      }
+    }
+  } else if(navigator.canShare && navigator.canShare({files:[]})) {
+    // 某些瀏覽器支援 files 分享
+    try {
+      const blob = await canvasToBlob(canvas);
+      const file = new File([blob], filename(selected), { type: "image/png" });
+      
+      await navigator.share({
+        files: [file],
+        title: "LINE貼圖",
+        text: "分享我用裁切工具製作的貼圖"
+      });
+    } catch(err) {
+      if(err.name !== "AbortError") {
+        // 降級為下載
+        saveToMobile();
+      }
+    }
+  } else {
+    // 不支援分享，改用下載
+    alert("ℹ️ 您的瀏覽器不支援分享功能，改為下載");
+    saveToMobile();
+  }
+}
+
+async function downloadZip(){
+  if(!img) return alert("❌ 請先上傳圖片");
+  
+  // 禁用按鈕並顯示處理中提示
+  const btn = event.target;
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "⏳ 正在打包 ZIP...";
+  
+  try {
+    const {cols, rows} = getInfo();
+    const zip = new JSZip();
+    const temp = document.createElement("canvas");
+
+    for(let i=0;i<cols*rows;i++){
+      drawTo(temp, i);
+      const data = temp.toDataURL("image/png").split(",")[1];
+      zip.file(filename(i), data, {base64:true});
+    }
+
+    const blob = await zip.generateAsync({type:"blob"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "LINE貼圖裁切結果.zip";
+    a.click();
+    
+    btn.textContent = "✅ 下載完成！";
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }, 2000);
+  } catch(err) {
+    alert("❌ 下載失敗：" + err.message);
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
