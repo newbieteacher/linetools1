@@ -104,7 +104,7 @@
     <p>LINE貼圖裁切工具</p>
     <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal">一張總表，自動切成多張透明 PNG</p>
   </div>
-  <div class="version">V2.0 教學版</div>
+  <div class="version">V3.0 教學版</div>
 </header>
 
 <div class="box">
@@ -160,6 +160,11 @@
   <div class="controls-section">
     <h2>步驟 3：去背設定</h2>
     
+    <div class="info-box" style="background:#fff3cd;border-left-color:#ffc107;margin-bottom:20px;font-size:16px">
+      💡 <strong>建議使用單色背景（白色或綠色效果最佳）</strong><br>
+      複雜背景可先用 AI 去背，再回來裁切。
+    </div>
+    
     <div class="toggle-switch">
       <label style="margin-bottom:0">🎨 啟用去背模式（變透明）</label>
       <div class="switch" id="bgRemoveToggle">
@@ -169,79 +174,39 @@
     </div>
 
     <div id="bgRemoveSettings" style="display:none;background:#fff;padding:20px;border-radius:12px;border:2px solid #2563eb;margin-top:20px">
-      <!-- 去背模式選擇 -->
-      <div class="control-group" style="margin-bottom:20px">
-        <label>🔧 去背模式選擇</label>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <button class="btn-mode" id="modeColor" style="background:#e0f2fe;color:#0369a1;border:2px solid #2563eb;padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.2s" onclick="switchMode('color')">
-            🎨 容差度去背
-          </button>
-          <button class="btn-mode" id="modePurple" style="background:#f3e8ff;color:#6d28d9;border:2px solid #d8b4fe;padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.2s" onclick="switchMode('purple')">
-            💜 紫色底自動
-          </button>
-        </div>
+      <!-- AI 去背快速連結 -->
+      <div style="margin-bottom:20px;padding:14px;background:#f0f9ff;border:2px solid #0284c7;border-radius:10px">
+        <p style="margin:0 0 8px 0;font-weight:bold;color:#0369a1">🤖 背景複雜？試試 AI 去背</p>
+        <button onclick="window.open('https://www.remove.bg/', '_blank')" style="width:100%;background:#0284c7;color:white;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:16px;transition:all 0.2s">
+          ✨ 一鍵 AI 去背（Remove.bg）
+        </button>
+        <p style="margin:8px 0 0 0;font-size:14px;color:#0369a1">完成後下載圖片，回來用本工具裁切</p>
       </div>
 
-      <!-- 容差度去背模式 -->
+      <!-- 邊界擴散去背模式 -->
       <div id="colorMode" style="display:block">
-        <div class="controls">
-          <div class="control-group">
-            <label>🎯 去背容差（值越大範圍越廣）</label>
-            <input type="range" id="tolerance" min="1" max="150" value="30" 
-                   style="padding:0;height:30px;cursor:pointer;border:none">
-            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px">
-              <span>1</span>
-              <span style="font-weight:bold;color:#2563eb">值：<span id="toleranceValue">30</span></span>
-              <span>150</span>
-            </div>
-            <div class="input-helper">數值越小去背效果越精準，但可能有遺漏</div>
-          </div>
+        <div style="background:#f0f9ff;border:2px solid #0284c7;padding:14px;border-radius:10px;margin-bottom:16px">
+          <p style="margin:0 0 12px 0;font-weight:bold;color:#0369a1">📍 邊界擴散去背原理</p>
+          <p style="margin:0;font-size:15px;color:#0369a1;line-height:1.6">
+            • 自動偵測四角落背景顏色<br>
+            • 從邊緣開始擴散刪除相似顏色<br>
+            • 防止誤刪圖片主體<br>
+            • 最適合單色背景
+          </p>
+        </div>
 
-          <div class="control-group">
-            <label>🎨 選擇去背顏色</label>
-            <input type="color" id="bgColor" value="#ffffff" style="height:60px;cursor:pointer">
-            <div class="input-helper">點選要去除的顏色</div>
+        <div class="control-group">
+          <label>🎯 去背容差（值越大範圍越廣）</label>
+          <input type="range" id="tolerance" min="1" max="100" value="30" 
+                 style="padding:0;height:30px;cursor:pointer;border:none">
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px">
+            <span>1</span>
+            <span style="font-weight:bold;color:#2563eb">值：<span id="toleranceValue">30</span></span>
+            <span>100</span>
           </div>
+          <div class="input-helper">數值越小效果越精準，越大范圍越廣（推薦 20-50）</div>
         </div>
       </div>
-
-      <!-- 紫色底自動去背模式 -->
-      <div id="purpleMode" style="display:none">
-        <div style="background:#f3e8ff;border:2px solid #d8b4fe;padding:16px;border-radius:10px;margin-bottom:16px">
-          <p style="margin:0 0 12px 0;font-weight:bold;font-size:18px">💜 紫色底精細去背編輯</p>
-          
-          <div style="margin-bottom:16px;padding:12px;background:white;border-radius:8px;border:2px solid #e9d5ff">
-            <p style="margin:0 0 12px 0;font-weight:bold;color:#6d28d9">編輯工具（在預覽圖上點擊繪製）：</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button id="brushRemove" onclick="switchBrushMode('remove')" style="background:#ef4444;color:white;border:none;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s;flex:1;min-width:120px">
-                − 移除（標記去背）
-              </button>
-              <button id="brushRestore" onclick="switchBrushMode('restore')" style="background:#22c55e;color:white;border:none;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s;flex:1;min-width:120px">
-                + 恢復（加回來）
-              </button>
-              <button onclick="undoPurpleEdit()" style="background:#f59e0b;color:white;border:none;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s;flex:1;min-width:120px">
-                ↶ 撤銷
-              </button>
-            </div>
-          </div>
-
-          <div style="margin-bottom:16px;padding:12px;background:#fef3c7;border-radius:8px;border:2px solid #fde047">
-            <p style="margin:0;color:#78350f;font-size:16px"><strong>💡 提示：</strong>在下方預覽圖上點擊繪製。紅色工具移除紫色部分，綠色工具恢復紫色部分。</p>
-          </div>
-
-          <div style="margin-bottom:16px;text-align:center">
-            <p style="margin:0 0 8px 0;font-weight:bold;color:#666">筆刷大小</p>
-            <input type="range" id="purpleBrushSize" min="3" max="50" value="15" style="width:100%;cursor:pointer">
-            <p style="margin:8px 0 0 0;font-size:16px">大小：<span id="purpleBrushSizeValue">15</span> px</p>
-          </div>
-
-          <button onclick="resetPurpleEdit()" style="width:100%;background:#d8b4fe;color:#6d28d9;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:bold;margin-bottom:8px;font-size:16px;transition:all 0.2s">
-            🔄 重置編輯
-          </button>
-          
-          <button onclick="confirmPurpleMode()" style="width:100%;background:#6d28d9;color:white;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s">
-            ✅ 確認去背完成
-          </button>
         </div>
       </div>
     </div>
@@ -317,13 +282,6 @@
 let img = null;
 let selected = 0;
 let enableBgRemove = false;
-let bgRemoveMode = "color"; // "color" 或 "purple"
-const purpleColor = [192, 132, 252]; // 紫色 #c084fc
-
-let purpleBrushMode = "remove"; // "remove" 或 "restore"
-let isDrawing = false;
-let purpleEditHistory = [];
-let purpleEditImageData = null;
 
 const file = document.getElementById("file");
 const colsInput = document.getElementById("cols");
@@ -337,14 +295,9 @@ const bgRemoveSettings = document.getElementById("bgRemoveSettings");
 const bgRemoveStatus = document.getElementById("bgRemoveStatus");
 const toleranceInput = document.getElementById("tolerance");
 const toleranceValue = document.getElementById("toleranceValue");
-const bgColorInput = document.getElementById("bgColor");
 const prefixInput = document.getElementById("prefix");
 const fullPreviewSection = document.getElementById("fullPreviewSection");
 const fullPreviewCanvas = document.getElementById("fullPreviewCanvas");
-const purpleToleranceInput = document.getElementById("purpleTolerance");
-const purpleToleranceValue = document.getElementById("purpleToleranceValue");
-const purpleBrushSizeInput = document.getElementById("purpleBrushSize");
-const purpleBrushSizeValue = document.getElementById("purpleBrushSizeValue");
 
 // 去背開關事件
 bgRemoveToggle.addEventListener("click", () => {
@@ -363,7 +316,7 @@ toleranceInput.addEventListener("input", () => {
 });
 
 // 顏色選擇事件
-bgColorInput.addEventListener("change", draw);
+toleranceInput.addEventListener("change", draw);
 
 file.addEventListener("change", e => {
   const f = e.target.files[0];
@@ -398,162 +351,13 @@ sizeSelect.onchange = () => {
   draw();
 };
 
-// 容差滑桿事件（紫色模式）
-purpleToleranceInput.addEventListener("input", () => {
-  purpleToleranceValue.textContent = purpleToleranceInput.value;
+// 容差滑桿事件
+toleranceInput.addEventListener("input", () => {
+  toleranceValue.textContent = toleranceInput.value;
   draw();
 });
 
-// 筆刷大小事件
-if(purpleBrushSizeInput) {
-  purpleBrushSizeInput.addEventListener("input", () => {
-    purpleBrushSizeValue.textContent = purpleBrushSizeInput.value;
-  });
-}
 
-// Canvas 鼠標事件（紫色編輯模式）
-canvas.addEventListener("mousedown", (e) => {
-  if(!enableBgRemove || bgRemoveMode !== "purple") return;
-  isDrawing = true;
-  purpleEditHistory.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  drawBrushStroke(x, y);
-});
-
-canvas.addEventListener("mousemove", (e) => {
-  if(!isDrawing || !enableBgRemove || bgRemoveMode !== "purple") return;
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  drawBrushStroke(x, y);
-});
-
-canvas.addEventListener("mouseup", () => {
-  isDrawing = false;
-});
-
-canvas.addEventListener("mouseleave", () => {
-  isDrawing = false;
-});
-
-// 去背模式切換
-function switchMode(mode) {
-  bgRemoveMode = mode;
-  const colorMode = document.getElementById("colorMode");
-  const purpleMode = document.getElementById("purpleMode");
-  const modeColor = document.getElementById("modeColor");
-  const modePurple = document.getElementById("modePurple");
-  
-  if(mode === "color") {
-    colorMode.style.display = "block";
-    purpleMode.style.display = "none";
-    modeColor.style.background = "#e0f2fe";
-    modeColor.style.borderColor = "#2563eb";
-    modePurple.style.background = "#f3e8ff";
-    modePurple.style.borderColor = "#d8b4fe";
-    bgColorInput.value = "#ffffff";
-  } else {
-    colorMode.style.display = "none";
-    purpleMode.style.display = "block";
-    modeColor.style.background = "#f3e8ff";
-    modeColor.style.borderColor = "#d8b4fe";
-    modePurple.style.background = "#e9d5ff";
-    modePurple.style.borderColor = "#6d28d9";
-    // 初始化筆刷模式
-    purpleBrushMode = "remove";
-    switchBrushMode("remove");
-    purpleEditHistory = [];
-  }
-  draw();
-}
-
-// 調整紫色容差值
-function adjustPurpleTolerance(amount) {
-  let currentValue = Number(purpleToleranceInput.value);
-  currentValue = Math.max(1, Math.min(150, currentValue + amount));
-  purpleToleranceInput.value = currentValue;
-  purpleToleranceValue.textContent = currentValue;
-  draw();
-}
-
-// 切換筆刷模式
-function switchBrushMode(mode) {
-  purpleBrushMode = mode;
-  const brushRemove = document.getElementById("brushRemove");
-  const brushRestore = document.getElementById("brushRestore");
-  
-  if(mode === "remove") {
-    brushRemove.style.background = "#dc2626";
-    brushRestore.style.background = "#cbd5e1";
-    brushRestore.style.cursor = "not-allowed";
-  } else {
-    brushRestore.style.background = "#16a34a";
-    brushRemove.style.background = "#cbd5e1";
-    brushRemove.style.cursor = "not-allowed";
-  }
-  purpleBrushMode = mode;
-}
-
-// 繪製筆刷筆畫
-function drawBrushStroke(x, y) {
-  const brushSize = Number(purpleBrushSizeInput.value);
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
-  
-  // 計算筆刷圓形區域
-  for(let dx = -brushSize; dx <= brushSize; dx++) {
-    for(let dy = -brushSize; dy <= brushSize; dy++) {
-      const distance = Math.sqrt(dx*dx + dy*dy);
-      if(distance > brushSize) continue;
-      
-      const px = Math.floor(x + dx);
-      const py = Math.floor(y + dy);
-      
-      if(px < 0 || px >= canvas.width || py < 0 || py >= canvas.height) continue;
-      
-      const idx = (py * canvas.width + px) * 4;
-      
-      if(purpleBrushMode === "remove") {
-        // 移除模式：設定為紫色
-        data[idx] = purpleColor[0];
-        data[idx+1] = purpleColor[1];
-        data[idx+2] = purpleColor[2];
-        data[idx+3] = 255;
-      } else {
-        // 恢復模式：設定為透明
-        data[idx+3] = 0;
-      }
-    }
-  }
-  
-  ctx.putImageData(imageData, 0, 0);
-}
-
-// 撤銷編輯
-function undoPurpleEdit() {
-  if(purpleEditHistory.length === 0) {
-    alert("⚠️ 沒有可撤銷的編輯");
-    return;
-  }
-  const lastState = purpleEditHistory.pop();
-  ctx.putImageData(lastState, 0, 0);
-}
-
-// 重置編輯
-function resetPurpleEdit() {
-  if(confirm("🔄 確定要重置所有編輯？")) {
-    purpleEditHistory = [];
-    draw();
-  }
-}
-
-// 確定紫色去背
-function confirmPurpleMode() {
-  // 已自動預覽，只需提示
-  alert("✅ 去背設定已確定");
-}
 
 function buildGrid(){
   const cols = Number(colsInput.value);
@@ -629,35 +433,14 @@ function drawTo(targetCanvas, index){
 
   c.drawImage(img, sx, sy, cellW, cellH, dx, dy, dw, dh);
 
-  // 去背處理
+  // 去背處理 - 邊界擴散演算法
   if(enableBgRemove) {
     const imageData = c.getImageData(0, 0, w, h);
-    const data = imageData.data;
-    
-    let bgColor;
-    let tolerance;
-    
-    if(bgRemoveMode === "purple") {
-      bgColor = purpleColor;
-      tolerance = Number(purpleToleranceInput.value);
-    } else {
-      bgColor = hexToRgb(bgColorInput.value);
-      tolerance = Number(toleranceInput.value);
-    }
-
-    for(let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i+1];
-      const b = data[i+2];
-      const dist = colorDistance([r,g,b], bgColor);
-      
-      if(dist < tolerance) {
-        data[i+3] = 0; // 設定 alpha 為 0（透明）
-      }
-    }
-    
+    const tolerance = Number(toleranceInput.value);
+    floodFillRemoveBackground(imageData, w, h, tolerance);
     c.putImageData(imageData, 0, 0);
   }
+}
 }
 
 function draw(){
