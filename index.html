@@ -104,7 +104,7 @@
     <p>LINE貼圖裁切工具</p>
     <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal">一張總表，自動切成多張透明 PNG</p>
   </div>
-  <div class="version">V3.0 教學版</div>
+  <div class="version">V2.0 教學版</div>
 </header>
 
 <div class="box">
@@ -160,11 +160,6 @@
   <div class="controls-section">
     <h2>步驟 3：去背設定</h2>
     
-    <div class="info-box" style="background:#fff3cd;border-left-color:#ffc107;margin-bottom:20px;font-size:16px">
-      💡 <strong>建議使用單色背景（白色或綠色效果最佳）</strong><br>
-      複雜背景可先用 AI 去背，再回來裁切。
-    </div>
-    
     <div class="toggle-switch">
       <label style="margin-bottom:0">🎨 啟用去背模式（變透明）</label>
       <div class="switch" id="bgRemoveToggle">
@@ -174,21 +169,12 @@
     </div>
 
     <div id="bgRemoveSettings" style="display:none;background:#fff;padding:20px;border-radius:12px;border:2px solid #2563eb;margin-top:20px">
-      <!-- AI 去背快速連結 -->
-      <div style="margin-bottom:20px;padding:14px;background:#f0f9ff;border:2px solid #0284c7;border-radius:10px">
-        <p style="margin:0 0 8px 0;font-weight:bold;color:#0369a1">🤖 背景複雜？試試 AI 去背</p>
-        <button onclick="window.open('https://www.remove.bg/', '_blank')" style="width:100%;background:#0284c7;color:white;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:16px;transition:all 0.2s">
-          ✨ 一鍵 AI 去背（Remove.bg）
-        </button>
-        <p style="margin:8px 0 0 0;font-size:14px;color:#0369a1">完成後下載圖片，回來用本工具裁切</p>
-      </div>
-
       <!-- 去背模式選擇 -->
       <div class="control-group" style="margin-bottom:20px">
         <label>🔧 去背模式選擇</label>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <button class="btn-mode" id="modeColor" style="background:#e0f2fe;color:#0369a1;border:2px solid #2563eb;padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.2s" onclick="switchMode('color')">
-            🎨 邊界擴散去背
+            🎨 容差度去背
           </button>
           <button class="btn-mode" id="modePurple" style="background:#f3e8ff;color:#6d28d9;border:2px solid #d8b4fe;padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.2s" onclick="switchMode('purple')">
             💜 紫色底自動
@@ -196,28 +182,26 @@
         </div>
       </div>
 
-      <!-- 邊界擴散去背模式 -->
+      <!-- 容差度去背模式 -->
       <div id="colorMode" style="display:block">
-        <div style="background:#f0f9ff;border:2px solid #0284c7;padding:14px;border-radius:10px;margin-bottom:16px">
-          <p style="margin:0 0 12px 0;font-weight:bold;color:#0369a1">📍 邊界擴散去背原理</p>
-          <p style="margin:0;font-size:15px;color:#0369a1;line-height:1.6">
-            • 自動偵測四角落背景顏色<br>
-            • 從邊緣開始擴散刪除相似顏色<br>
-            • 防止誤刪圖片主體<br>
-            • 最適合單色背景
-          </p>
-        </div>
-
-        <div class="control-group">
-          <label>🎯 去背容差（值越大範圍越廣）</label>
-          <input type="range" id="tolerance" min="1" max="100" value="30" 
-                 style="padding:0;height:30px;cursor:pointer;border:none">
-          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px">
-            <span>1</span>
-            <span style="font-weight:bold;color:#2563eb">值：<span id="toleranceValue">30</span></span>
-            <span>100</span>
+        <div class="controls">
+          <div class="control-group">
+            <label>🎯 去背容差（值越大範圍越廣）</label>
+            <input type="range" id="tolerance" min="1" max="150" value="30" 
+                   style="padding:0;height:30px;cursor:pointer;border:none">
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px">
+              <span>1</span>
+              <span style="font-weight:bold;color:#2563eb">值：<span id="toleranceValue">30</span></span>
+              <span>150</span>
+            </div>
+            <div class="input-helper">數值越小去背效果越精準，但可能有遺漏</div>
           </div>
-          <div class="input-helper">數值越小效果越精準，越大范圍越廣（推薦 20-50）</div>
+
+          <div class="control-group">
+            <label>🎨 選擇去背顏色</label>
+            <input type="color" id="bgColor" value="#ffffff" style="height:60px;cursor:pointer">
+            <div class="input-helper">點選要去除的顏色</div>
+          </div>
         </div>
       </div>
 
@@ -615,88 +599,6 @@ function hexToRgb(hex) {
   ] : [255, 255, 255];
 }
 
-// 從四個角落取樣背景顏色
-function sampleCornerColor(imageData, w, h) {
-  const data = imageData.data;
-  const sampleSize = Math.min(10, Math.floor(Math.min(w, h) / 10));
-  const colors = [];
-  
-  // 四個角落：左上、右上、左下、右下
-  const corners = [
-    [sampleSize, sampleSize],           // 左上
-    [w - sampleSize - 1, sampleSize],   // 右上
-    [sampleSize, h - sampleSize - 1],   // 左下
-    [w - sampleSize - 1, h - sampleSize - 1] // 右下
-  ];
-  
-  corners.forEach(([x, y]) => {
-    const idx = (y * w + x) * 4;
-    colors.push([data[idx], data[idx+1], data[idx+2]]);
-  });
-  
-  // 計算平均顏色
-  const avgColor = [
-    Math.round(colors.reduce((sum, c) => sum + c[0], 0) / colors.length),
-    Math.round(colors.reduce((sum, c) => sum + c[1], 0) / colors.length),
-    Math.round(colors.reduce((sum, c) => sum + c[2], 0) / colors.length)
-  ];
-  
-  return avgColor;
-}
-
-// 邊界擴散去背（Flood Fill 算法）
-function floodFillRemoveBackground(imageData, w, h, tolerance) {
-  const data = imageData.data;
-  const visited = new Uint8Array(w * h);
-  
-  // 取樣背景顏色（從四個角落）
-  const bgColor = sampleCornerColor(imageData, w, h);
-  
-  // BFS 從邊界開始掃描
-  const queue = [];
-  
-  // 添加邊界像素到佇列
-  // 頂部和底部邊界
-  for(let x = 0; x < w; x++) {
-    queue.push([x, 0]);
-    queue.push([x, h - 1]);
-  }
-  
-  // 左側和右側邊界
-  for(let y = 0; y < h; y++) {
-    queue.push([0, y]);
-    queue.push([w - 1, y]);
-  }
-  
-  // Flood fill
-  while(queue.length > 0) {
-    const [x, y] = queue.shift();
-    
-    if(x < 0 || x >= w || y < 0 || y >= h) continue;
-    
-    const idx = y * w + x;
-    if(visited[idx]) continue;
-    
-    const pixelIdx = idx * 4;
-    const r = data[pixelIdx];
-    const g = data[pixelIdx + 1];
-    const b = data[pixelIdx + 2];
-    
-    const dist = colorDistance([r, g, b], bgColor);
-    
-    if(dist < tolerance) {
-      visited[idx] = 1;
-      data[pixelIdx + 3] = 0; // 設定為透明
-      
-      // 加入相鄰像素
-      queue.push([x + 1, y]);
-      queue.push([x - 1, y]);
-      queue.push([x, y + 1]);
-      queue.push([x, y - 1]);
-    }
-  }
-}
-
 function drawTo(targetCanvas, index){
   if(!img) return;
   const {cols, rows, w, h} = getInfo();
@@ -730,33 +632,32 @@ function drawTo(targetCanvas, index){
   // 去背處理
   if(enableBgRemove) {
     const imageData = c.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    
+    let bgColor;
+    let tolerance;
     
     if(bgRemoveMode === "purple") {
-      // 紫色去背模式
-      const data = imageData.data;
-      const bgColor = purpleColor;
-      const tolerance = Number(purpleToleranceInput.value);
-
-      for(let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i+1];
-        const b = data[i+2];
-        const dist = colorDistance([r,g,b], bgColor);
-        
-        if(dist < tolerance) {
-          data[i+3] = 0;
-        }
-      }
-      
-      c.putImageData(imageData, 0, 0);
+      bgColor = purpleColor;
+      tolerance = Number(purpleToleranceInput.value);
     } else {
-      // 邊界擴散去背模式（新算法）
-      const tolerance = Number(toleranceInput.value);
-      floodFillRemoveBackground(imageData, w, h, tolerance);
-      c.putImageData(imageData, 0, 0);
+      bgColor = hexToRgb(bgColorInput.value);
+      tolerance = Number(toleranceInput.value);
     }
+
+    for(let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i+1];
+      const b = data[i+2];
+      const dist = colorDistance([r,g,b], bgColor);
+      
+      if(dist < tolerance) {
+        data[i+3] = 0; // 設定 alpha 為 0（透明）
+      }
+    }
+    
+    c.putImageData(imageData, 0, 0);
   }
-}
 }
 
 function draw(){
