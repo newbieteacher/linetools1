@@ -53,6 +53,48 @@
     .note{font-size:20px;color:#555;line-height:2}
     .info-box{background:#dbeafe;border-left:5px solid #2563eb;padding:20px;border-radius:8px;margin:20px 0}
     .input-helper{font-size:16px;color:#666;margin-top:6px}
+    
+    /* 響應式設計 */
+    @media (max-width:768px){
+      body{font-size:18px}
+      header{padding:20px;flex-direction:column;text-align:center}
+      .header-left h1{font-size:36px}
+      .header-left p{font-size:20px}
+      .version{position:static;margin-top:12px;font-size:18px}
+      .box{padding:20px;margin:16px auto}
+      .steps{grid-template-columns:repeat(5,1fr);gap:8px}
+      .step{padding:12px;font-size:16px}
+      .controls{grid-template-columns:1fr !important;gap:16px}
+      .controls.four{grid-template-columns:1fr !important}
+      label{font-size:18px}
+      input,select{font-size:18px;padding:12px}
+      button{font-size:18px;padding:16px 24px}
+      .preview{flex-direction:column;gap:20px}
+      .preview-left{flex:0 0 auto;width:100%}
+      .preview-right{flex:1;min-width:100%;width:100%}
+      h2{font-size:22px;margin:0 0 16px 0}
+      .toggle-switch{gap:12px;margin-bottom:16px}
+      .grid{gap:6px}
+      .cell{padding:10px;font-size:16px}
+      canvas{border:6px solid white;max-width:100%}
+    }
+    
+    @media (max-width:480px){
+      body{font-size:16px}
+      header{padding:16px}
+      .header-left h1{font-size:28px}
+      .header-left p{font-size:16px}
+      .box{padding:16px;margin:12px auto}
+      .steps{grid-template-columns:repeat(5,1fr);gap:6px}
+      .step{padding:8px;font-size:13px}
+      label{font-size:16px}
+      input,select{font-size:16px;padding:10px}
+      button{font-size:16px;padding:14px 20px}
+      h2{font-size:18px;margin:0 0 12px 0}
+      .info-box{padding:12px;margin:12px 0;font-size:15px}
+      .input-helper{font-size:14px}
+      canvas{border:4px solid white}
+    }
   </style>
 </head>
 <body>
@@ -62,7 +104,7 @@
     <p>LINE貼圖裁切工具</p>
     <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal">一張總表，自動切成多張透明 PNG</p>
   </div>
-  <div class="version">V1.0 教學版</div>
+  <div class="version">V2.0 教學版</div>
 </header>
 
 <div class="box">
@@ -108,8 +150,8 @@
     <div class="controls">
       <div class="control-group">
         <label>📝 檔名前置文字</label>
-        <input type="text" id="prefix" value="貼圖" maxlength="10" placeholder="例：貼圖 或 sticker">
-        <div class="input-helper">中文最多 3 字，英文最多 6 字</div>
+        <input type="text" id="prefix" value="貼圖" maxlength="18" placeholder="例：貼圖 或 sticker">
+        <div class="input-helper">中文最多 6 字，英文最多 12 字</div>
       </div>
     </div>
   </div>
@@ -127,45 +169,116 @@
     </div>
 
     <div id="bgRemoveSettings" style="display:none;background:#fff;padding:20px;border-radius:12px;border:2px solid #2563eb;margin-top:20px">
-      <div class="controls">
-        <div class="control-group">
-          <label>🎯 去背容差（值越大範圍越廣）</label>
-          <input type="range" id="tolerance" min="1" max="150" value="30" 
-                 style="padding:0;height:30px;cursor:pointer;border:none">
-          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px">
-            <span>1</span>
-            <span style="font-weight:bold;color:#2563eb">值：<span id="toleranceValue">30</span></span>
-            <span>150</span>
-          </div>
-          <div class="input-helper">數值越小去背效果越精準，但可能有遺漏</div>
+      <!-- 去背模式選擇 -->
+      <div class="control-group" style="margin-bottom:20px">
+        <label>🔧 去背模式選擇</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <button class="btn-mode" id="modeColor" style="background:#e0f2fe;color:#0369a1;border:2px solid #2563eb;padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.2s" onclick="switchMode('color')">
+            🎨 容差度去背
+          </button>
+          <button class="btn-mode" id="modePurple" style="background:#f3e8ff;color:#6d28d9;border:2px solid #d8b4fe;padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.2s" onclick="switchMode('purple')">
+            💜 紫色底自動
+          </button>
         </div>
+      </div>
 
-        <div class="control-group">
-          <label>🎨 選擇去背顏色</label>
-          <input type="color" id="bgColor" value="#ffffff" style="height:60px;cursor:pointer">
-          <div class="input-helper">點選要去除的顏色</div>
+      <!-- 容差度去背模式 -->
+      <div id="colorMode" style="display:block">
+        <div class="controls">
+          <div class="control-group">
+            <label>🎯 去背容差（值越大範圍越廣）</label>
+            <input type="range" id="tolerance" min="1" max="150" value="30" 
+                   style="padding:0;height:30px;cursor:pointer;border:none">
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px">
+              <span>1</span>
+              <span style="font-weight:bold;color:#2563eb">值：<span id="toleranceValue">30</span></span>
+              <span>150</span>
+            </div>
+            <div class="input-helper">數值越小去背效果越精準，但可能有遺漏</div>
+          </div>
+
+          <div class="control-group">
+            <label>🎨 選擇去背顏色</label>
+            <input type="color" id="bgColor" value="#ffffff" style="height:60px;cursor:pointer">
+            <div class="input-helper">點選要去除的顏色</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 紫色底自動去背模式 -->
+      <div id="purpleMode" style="display:none">
+        <div style="background:#f3e8ff;border:2px solid #d8b4fe;padding:16px;border-radius:10px;margin-bottom:16px">
+          <p style="margin:0 0 12px 0;font-weight:bold;font-size:18px">💜 紫色底精細去背編輯</p>
+          
+          <div style="margin-bottom:16px;padding:12px;background:white;border-radius:8px;border:2px solid #e9d5ff">
+            <p style="margin:0 0 12px 0;font-weight:bold;color:#6d28d9">編輯工具（在預覽圖上點擊繪製）：</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button id="brushRemove" onclick="switchBrushMode('remove')" style="background:#ef4444;color:white;border:none;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s;flex:1;min-width:120px">
+                − 移除（標記去背）
+              </button>
+              <button id="brushRestore" onclick="switchBrushMode('restore')" style="background:#22c55e;color:white;border:none;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s;flex:1;min-width:120px">
+                + 恢復（加回來）
+              </button>
+              <button onclick="undoPurpleEdit()" style="background:#f59e0b;color:white;border:none;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s;flex:1;min-width:120px">
+                ↶ 撤銷
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;padding:12px;background:#fef3c7;border-radius:8px;border:2px solid #fde047">
+            <p style="margin:0;color:#78350f;font-size:16px"><strong>💡 提示：</strong>在下方預覽圖上點擊繪製。紅色工具移除紫色部分，綠色工具恢復紫色部分。</p>
+          </div>
+
+          <div style="margin-bottom:16px;text-align:center">
+            <p style="margin:0 0 8px 0;font-weight:bold;color:#666">筆刷大小</p>
+            <input type="range" id="purpleBrushSize" min="3" max="50" value="15" style="width:100%;cursor:pointer">
+            <p style="margin:8px 0 0 0;font-size:16px">大小：<span id="purpleBrushSizeValue">15</span> px</p>
+          </div>
+
+          <button onclick="resetPurpleEdit()" style="width:100%;background:#d8b4fe;color:#6d28d9;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:bold;margin-bottom:8px;font-size:16px;transition:all 0.2s">
+            🔄 重置編輯
+          </button>
+          
+          <button onclick="confirmPurpleMode()" style="width:100%;background:#6d28d9;color:white;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s">
+            ✅ 確認去背完成
+          </button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- 步驟 4 & 5：預覽與下載 -->
+  <div id="fullPreviewSection" style="display:none;margin-bottom:30px;background:#f8fafc;padding:24px;border-radius:16px;border:3px solid #e2e8f0">
+    <h2>📸 整張原始圖片預覽（未裁切）</h2>
+    <p style="font-size:18px;color:#666;margin:0 0 20px 0">用來確認行列數設定是否正確</p>
+    <canvas id="fullPreviewCanvas" style="background:
+      linear-gradient(45deg,#ddd 25%,transparent 25%),
+      linear-gradient(-45deg,#ddd 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,#ddd 75%),
+      linear-gradient(-45deg,transparent 75%,#ddd 75%);
+      background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;
+      border:8px solid white;box-shadow:0 5px 20px #0002;border-radius:16px;max-width:100%;height:auto;display:block;margin:0 auto"></canvas>
+  </div>
+
   <div class="preview">
     <div class="preview-left">
       <h2>步驟 4：預覽目前這一張</h2>
       <canvas id="canvas" width="370" height="320"></canvas>
       <div style="margin-top:20px">
         <button class="btn-primary" onclick="saveToMobile()" style="width:100%;margin-bottom:12px">
-          📱 手機儲存這張
+          � 電腦儲存這張
         </button>
         <button class="btn-secondary" onclick="shareImage()" style="width:100%">
-          ✈️ 分享這張圖片
+          📱 手機分享這張
         </button>
       </div>
       <div class="info-box" style="margin-top:20px;font-size:18px;padding:16px">
-        <strong>📲 儲存提醒：</strong><br>
-        • <strong>iPhone</strong>：可能存到「檔案」，再手動存到相簿<br>
-        • <strong>Android</strong>：通常存在「下載」資料夾
+        <strong>💾 電腦儲存提醒：</strong><br>
+        圖片會存到電腦的「下載」資料夾
+      </div>
+      <div class="info-box" style="margin-top:12px;font-size:18px;padding:16px;background:#e0e7ff;border-left-color:#6366f1">
+        <strong>📱 手機分享提醒：</strong><br>
+        分享功能為手機版操作，可分享到 LINE 或其他應用
       </div>
     </div>
 
@@ -204,6 +317,13 @@
 let img = null;
 let selected = 0;
 let enableBgRemove = false;
+let bgRemoveMode = "color"; // "color" 或 "purple"
+const purpleColor = [192, 132, 252]; // 紫色 #c084fc
+
+let purpleBrushMode = "remove"; // "remove" 或 "restore"
+let isDrawing = false;
+let purpleEditHistory = [];
+let purpleEditImageData = null;
 
 const file = document.getElementById("file");
 const colsInput = document.getElementById("cols");
@@ -219,6 +339,12 @@ const toleranceInput = document.getElementById("tolerance");
 const toleranceValue = document.getElementById("toleranceValue");
 const bgColorInput = document.getElementById("bgColor");
 const prefixInput = document.getElementById("prefix");
+const fullPreviewSection = document.getElementById("fullPreviewSection");
+const fullPreviewCanvas = document.getElementById("fullPreviewCanvas");
+const purpleToleranceInput = document.getElementById("purpleTolerance");
+const purpleToleranceValue = document.getElementById("purpleToleranceValue");
+const purpleBrushSizeInput = document.getElementById("purpleBrushSize");
+const purpleBrushSizeValue = document.getElementById("purpleBrushSizeValue");
 
 // 去背開關事件
 bgRemoveToggle.addEventListener("click", () => {
@@ -249,20 +375,185 @@ file.addEventListener("change", e => {
       selected = 0;
       buildGrid();
       draw();
+      drawFullPreview();
+      fullPreviewSection.style.display = "block";
     };
     img.src = ev.target.result;
   };
   reader.readAsDataURL(f);
 });
 
-colsInput.oninput = buildGrid;
-rowsInput.oninput = buildGrid;
+colsInput.oninput = () => {
+  buildGrid();
+  drawFullPreview();
+};
+rowsInput.oninput = () => {
+  buildGrid();
+  drawFullPreview();
+};
 sizeSelect.onchange = () => {
   const [w,h] = sizeSelect.value.split(",");
   canvas.width = Number(w);
   canvas.height = Number(h);
   draw();
 };
+
+// 容差滑桿事件（紫色模式）
+purpleToleranceInput.addEventListener("input", () => {
+  purpleToleranceValue.textContent = purpleToleranceInput.value;
+  draw();
+});
+
+// 筆刷大小事件
+if(purpleBrushSizeInput) {
+  purpleBrushSizeInput.addEventListener("input", () => {
+    purpleBrushSizeValue.textContent = purpleBrushSizeInput.value;
+  });
+}
+
+// Canvas 鼠標事件（紫色編輯模式）
+canvas.addEventListener("mousedown", (e) => {
+  if(!enableBgRemove || bgRemoveMode !== "purple") return;
+  isDrawing = true;
+  purpleEditHistory.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  drawBrushStroke(x, y);
+});
+
+canvas.addEventListener("mousemove", (e) => {
+  if(!isDrawing || !enableBgRemove || bgRemoveMode !== "purple") return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  drawBrushStroke(x, y);
+});
+
+canvas.addEventListener("mouseup", () => {
+  isDrawing = false;
+});
+
+canvas.addEventListener("mouseleave", () => {
+  isDrawing = false;
+});
+
+// 去背模式切換
+function switchMode(mode) {
+  bgRemoveMode = mode;
+  const colorMode = document.getElementById("colorMode");
+  const purpleMode = document.getElementById("purpleMode");
+  const modeColor = document.getElementById("modeColor");
+  const modePurple = document.getElementById("modePurple");
+  
+  if(mode === "color") {
+    colorMode.style.display = "block";
+    purpleMode.style.display = "none";
+    modeColor.style.background = "#e0f2fe";
+    modeColor.style.borderColor = "#2563eb";
+    modePurple.style.background = "#f3e8ff";
+    modePurple.style.borderColor = "#d8b4fe";
+    bgColorInput.value = "#ffffff";
+  } else {
+    colorMode.style.display = "none";
+    purpleMode.style.display = "block";
+    modeColor.style.background = "#f3e8ff";
+    modeColor.style.borderColor = "#d8b4fe";
+    modePurple.style.background = "#e9d5ff";
+    modePurple.style.borderColor = "#6d28d9";
+    // 初始化筆刷模式
+    purpleBrushMode = "remove";
+    switchBrushMode("remove");
+    purpleEditHistory = [];
+  }
+  draw();
+}
+
+// 調整紫色容差值
+function adjustPurpleTolerance(amount) {
+  let currentValue = Number(purpleToleranceInput.value);
+  currentValue = Math.max(1, Math.min(150, currentValue + amount));
+  purpleToleranceInput.value = currentValue;
+  purpleToleranceValue.textContent = currentValue;
+  draw();
+}
+
+// 切換筆刷模式
+function switchBrushMode(mode) {
+  purpleBrushMode = mode;
+  const brushRemove = document.getElementById("brushRemove");
+  const brushRestore = document.getElementById("brushRestore");
+  
+  if(mode === "remove") {
+    brushRemove.style.background = "#dc2626";
+    brushRestore.style.background = "#cbd5e1";
+    brushRestore.style.cursor = "not-allowed";
+  } else {
+    brushRestore.style.background = "#16a34a";
+    brushRemove.style.background = "#cbd5e1";
+    brushRemove.style.cursor = "not-allowed";
+  }
+  purpleBrushMode = mode;
+}
+
+// 繪製筆刷筆畫
+function drawBrushStroke(x, y) {
+  const brushSize = Number(purpleBrushSizeInput.value);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  
+  // 計算筆刷圓形區域
+  for(let dx = -brushSize; dx <= brushSize; dx++) {
+    for(let dy = -brushSize; dy <= brushSize; dy++) {
+      const distance = Math.sqrt(dx*dx + dy*dy);
+      if(distance > brushSize) continue;
+      
+      const px = Math.floor(x + dx);
+      const py = Math.floor(y + dy);
+      
+      if(px < 0 || px >= canvas.width || py < 0 || py >= canvas.height) continue;
+      
+      const idx = (py * canvas.width + px) * 4;
+      
+      if(purpleBrushMode === "remove") {
+        // 移除模式：設定為紫色
+        data[idx] = purpleColor[0];
+        data[idx+1] = purpleColor[1];
+        data[idx+2] = purpleColor[2];
+        data[idx+3] = 255;
+      } else {
+        // 恢復模式：設定為透明
+        data[idx+3] = 0;
+      }
+    }
+  }
+  
+  ctx.putImageData(imageData, 0, 0);
+}
+
+// 撤銷編輯
+function undoPurpleEdit() {
+  if(purpleEditHistory.length === 0) {
+    alert("⚠️ 沒有可撤銷的編輯");
+    return;
+  }
+  const lastState = purpleEditHistory.pop();
+  ctx.putImageData(lastState, 0, 0);
+}
+
+// 重置編輯
+function resetPurpleEdit() {
+  if(confirm("🔄 確定要重置所有編輯？")) {
+    purpleEditHistory = [];
+    draw();
+  }
+}
+
+// 確定紫色去背
+function confirmPurpleMode() {
+  // 已自動預覽，只需提示
+  alert("✅ 去背設定已確定");
+}
 
 function buildGrid(){
   const cols = Number(colsInput.value);
@@ -342,8 +633,17 @@ function drawTo(targetCanvas, index){
   if(enableBgRemove) {
     const imageData = c.getImageData(0, 0, w, h);
     const data = imageData.data;
-    const bgColor = hexToRgb(bgColorInput.value);
-    const tolerance = Number(toleranceInput.value);
+    
+    let bgColor;
+    let tolerance;
+    
+    if(bgRemoveMode === "purple") {
+      bgColor = purpleColor;
+      tolerance = Number(purpleToleranceInput.value);
+    } else {
+      bgColor = hexToRgb(bgColorInput.value);
+      tolerance = Number(toleranceInput.value);
+    }
 
     for(let i = 0; i < data.length; i += 4) {
       const r = data[i];
@@ -364,6 +664,43 @@ function draw(){
   drawTo(canvas, selected);
 }
 
+function drawFullPreview(){
+  if(!img) return;
+  const {cols, rows} = getInfo();
+  
+  // 設定 canvas 尺寸與原圖相同
+  fullPreviewCanvas.width = img.width;
+  fullPreviewCanvas.height = img.height;
+  
+  const c = fullPreviewCanvas.getContext("2d");
+  
+  // 繪製原始圖片
+  c.drawImage(img, 0, 0);
+  
+  // 繪製網格線
+  c.strokeStyle = "rgba(0, 0, 0, 0.3)";
+  c.lineWidth = 2;
+  
+  const cellW = img.width / cols;
+  const cellH = img.height / rows;
+  
+  // 繪製垂直線
+  for(let i = 1; i < cols; i++) {
+    c.beginPath();
+    c.moveTo(i * cellW, 0);
+    c.lineTo(i * cellW, img.height);
+    c.stroke();
+  }
+  
+  // 繪製水平線
+  for(let i = 1; i < rows; i++) {
+    c.beginPath();
+    c.moveTo(0, i * cellH);
+    c.lineTo(img.width, i * cellH);
+    c.stroke();
+  }
+}
+
 function filename(index){
   const customPrefix = prefixInput.value.trim() || "貼圖";
   return `${customPrefix}${String(index+1).padStart(2,"0")}.png`;
@@ -372,16 +709,29 @@ function filename(index){
 // 獲取 Canvas 為 Blob
 async function canvasToBlob(canvasElement) {
   return new Promise(resolve => {
-    canvasElement.toBlob(resolve, "image/png");
+    // 移除 canvas 的背景樣式以確保透明
+    const originalBg = canvasElement.style.background;
+    canvasElement.style.background = "none";
+    canvasElement.toBlob(blob => {
+      canvasElement.style.background = originalBg;
+      resolve(blob);
+    }, "image/png");
   });
 }
 
 function saveToMobile(){
   if(!img) return alert("❌ 請先上傳圖片");
   draw();
+  
+  // 臨時移除背景以確保導出純透明 PNG
+  const originalBg = canvas.style.background;
+  canvas.style.background = "none";
+  const dataUrl = canvas.toDataURL("image/png");
+  canvas.style.background = originalBg;
+  
   const a = document.createElement("a");
   a.download = filename(selected);
-  a.href = canvas.toDataURL("image/png");
+  a.href = dataUrl;
   a.click();
 }
 
@@ -446,10 +796,16 @@ async function downloadZip(){
     const {cols, rows} = getInfo();
     const zip = new JSZip();
     const temp = document.createElement("canvas");
+    // 確保臨時 canvas 沒有背景樣式
+    temp.style.background = "none";
 
     for(let i=0;i<cols*rows;i++){
       drawTo(temp, i);
+      // 移除背景以確保導出純透明 PNG
+      const originalBg = temp.style.background;
+      temp.style.background = "none";
       const data = temp.toDataURL("image/png").split(",")[1];
+      temp.style.background = originalBg;
       zip.file(filename(i), data, {base64:true});
     }
 
