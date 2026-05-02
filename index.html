@@ -39,13 +39,7 @@
     .preview-left{flex:0 0 auto}
     .preview-right{flex:1;min-width:400px}
     h2{font-size:26px;margin:0 0 20px 0;color:#1e293b}
-    canvas{background:
-      linear-gradient(45deg,#ddd 25%,transparent 25%),
-      linear-gradient(-45deg,#ddd 25%,transparent 25%),
-      linear-gradient(45deg,transparent 75%,#ddd 75%),
-      linear-gradient(-45deg,transparent 75%,#ddd 75%);
-      background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;
-      border:8px solid white;box-shadow:0 5px 20px #0002;border-radius:16px;max-width:100%;height:auto}
+    canvas{background:transparent;border:8px solid white;box-shadow:0 5px 20px #0002;border-radius:16px;max-width:100%;height:auto}
     .grid{display:grid;gap:8px;margin-top:20px}
     .cell{background:#e5e7eb;border:3px solid transparent;border-radius:10px;padding:14px;text-align:center;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.2s}
     .cell:hover{background:#d1d5db}
@@ -104,16 +98,15 @@
     <p>LINE貼圖裁切工具</p>
     <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal">一張總表，自動切成多張透明 PNG</p>
   </div>
-  <div class="version">V3.0 教學版</div>
+  <div class="version">V3.1 簡化版</div>
 </header>
 
 <div class="box">
   <div class="steps">
-    <div class="step">1 上傳總表</div>
+    <div class="step">1 上傳圖片</div>
     <div class="step">2 設定行列</div>
-    <div class="step">3 去背設定</div>
-    <div class="step">4 預覽</div>
-    <div class="step">5 下載 ZIP</div>
+    <div class="step">3 預覽</div>
+    <div class="step">4 下載 ZIP</div>
   </div>
 
   <!-- 步驟 1 & 2：上傳與基本設定 -->
@@ -156,73 +149,26 @@
     </div>
   </div>
 
-  <!-- 步驟 3：去背設定 -->
-  <div class="controls-section">
-    <h2>步驟 3：去背設定</h2>
-    
-    <div class="info-box" style="background:#fff3cd;border-left-color:#ffc107;margin-bottom:20px;font-size:16px">
-      💡 <strong>建議使用單色背景（白色或綠色效果最佳）</strong><br>
-      複雜背景可先用 AI 去背，再回來裁切。
-    </div>
-    
-    <div class="toggle-switch">
-      <label style="margin-bottom:0">🎨 啟用去背模式（變透明）</label>
-      <div class="switch" id="bgRemoveToggle">
-        <div class="switch-knob"></div>
-      </div>
-      <span id="bgRemoveStatus" style="font-size:20px;color:#666">未啟用</span>
-    </div>
-
-    <div id="bgRemoveSettings" style="display:none;background:#fff;padding:20px;border-radius:12px;border:2px solid #2563eb;margin-top:20px">
-      <!-- AI 去背快速連結 -->
-      <div style="margin-bottom:20px;padding:14px;background:#f0f9ff;border:2px solid #0284c7;border-radius:10px">
-        <p style="margin:0 0 8px 0;font-weight:bold;color:#0369a1">🤖 背景複雜？試試 AI 去背</p>
-        <button onclick="window.open('https://www.remove.bg/', '_blank')" style="width:100%;background:#0284c7;color:white;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:16px;transition:all 0.2s">
-          ✨ 一鍵 AI 去背（Remove.bg）
-        </button>
-        <p style="margin:8px 0 0 0;font-size:14px;color:#0369a1">完成後下載圖片，回來用本工具裁切</p>
-      </div>
-
-      <!-- 邊界擴散去背模式 -->
-      <div id="colorMode" style="display:block">
-        <div style="background:#f0f9ff;border:2px solid #0284c7;padding:14px;border-radius:10px;margin-bottom:16px">
-          <p style="margin:0 0 12px 0;font-weight:bold;color:#0369a1">📍 邊界擴散去背原理</p>
-          <p style="margin:0;font-size:15px;color:#0369a1;line-height:1.6">
-            • 自動偵測四角落背景顏色<br>
-            • 從邊緣開始擴散刪除相似顏色<br>
-            • 防止誤刪圖片主體<br>
-            • 最適合單色背景
-          </p>
-        </div>
-
-        <div class="control-group">
-          <label>🎯 去背容差（值越大範圍越廣）</label>
-          <input type="range" id="tolerance" min="1" max="100" value="30" 
-                 style="padding:0;height:30px;cursor:pointer;border:none">
-          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px">
-            <span>1</span>
-            <span style="font-weight:bold;color:#2563eb">值：<span id="toleranceValue">30</span></span>
-            <span>100</span>
-          </div>
-          <div class="input-helper">數值越小效果越精準，越大范圍越廣（推薦 20-50）</div>
-        </div>
-      </div>
-        </div>
-      </div>
-    </div>
+  <!-- AI 去背推薦 -->
+  <div class="controls-section" style="background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border:3px solid #0284c7">
+    <h2 style="color:#0369a1">🤖 背景複雜？先用 AI 去背</h2>
+    <p style="margin:0 0 16px 0;font-size:18px;color:#0369a1;line-height:1.8">
+      <strong>💡 建議步驟：</strong><br>
+      複雜背景的貼圖建議先用 AI 工具一次性去背，再回來用本工具裁切。<br>
+      簡單背景（純色）可直接裁切。
+    </p>
+    <button onclick="window.open('https://www.remove.bg/', '_blank')" 
+            style="width:100%;max-width:400px;background:linear-gradient(135deg,#0284c7 0%,#0369a1 100%);color:white;border:none;padding:16px 32px;border-radius:10px;cursor:pointer;font-weight:bold;font-size:18px;transition:all 0.3s;box-shadow:0 4px 12px rgba(2,132,199,0.3)">
+      ✨ 一鍵開啟 Remove.bg AI 去背
+    </button>
+    <p style="margin:12px 0 0 0;font-size:16px;color:#0369a1">完成去背後，下載圖片回來裁切</p>
   </div>
 
   <!-- 步驟 4 & 5：預覽與下載 -->
   <div id="fullPreviewSection" style="display:none;margin-bottom:30px;background:#f8fafc;padding:24px;border-radius:16px;border:3px solid #e2e8f0">
     <h2>📸 整張原始圖片預覽（未裁切）</h2>
     <p style="font-size:18px;color:#666;margin:0 0 20px 0">用來確認行列數設定是否正確</p>
-    <canvas id="fullPreviewCanvas" style="background:
-      linear-gradient(45deg,#ddd 25%,transparent 25%),
-      linear-gradient(-45deg,#ddd 25%,transparent 25%),
-      linear-gradient(45deg,transparent 75%,#ddd 75%),
-      linear-gradient(-45deg,transparent 75%,#ddd 75%);
-      background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;
-      border:8px solid white;box-shadow:0 5px 20px #0002;border-radius:16px;max-width:100%;height:auto;display:block;margin:0 auto"></canvas>
+    <canvas id="fullPreviewCanvas" style="background:transparent;border:8px solid white;box-shadow:0 5px 20px #0002;border-radius:16px;max-width:100%;height:auto;display:block;margin:0 auto"></canvas>
   </div>
 
   <div class="preview">
@@ -255,16 +201,15 @@
           📋 <strong>使用步驟：</strong><br>
           1. 把貼圖排成一張總表（例如 4欄 × 3列）<br>
           2. 上傳總表圖片<br>
-          3. 設定去背與檔名<br>
-          4. 點選格子預覽<br>
-          5. 一鍵下載全部 ZIP<br><br>
-          💡 <strong>去背小提示：</strong><br>
-          去背模式會把背景變透明，輸出 PNG 格式。<br>
-          調整容差值來微調去背效果。
+          3. 設定檔名前置及下載<br>
+          4. 一鍵下載全部 ZIP<br><br>
+          💡 <strong>上傳準備：</strong><br>
+          複雜背景建議先用 AI 去背工具處理。<br>
+          簡單背景（純色）可直接裁切。
         </p>
       </div>
 
-      <h2>步驟 5：整批下載</h2>
+      <h2>步驟 4：整批下載</h2>
       <button class="btn-success" onclick="downloadZip()" style="width:100%">
         🎁 整批下載 ZIP（電腦推薦）
       </button>
@@ -281,7 +226,6 @@
 <script>
 let img = null;
 let selected = 0;
-let enableBgRemove = false;
 
 const file = document.getElementById("file");
 const colsInput = document.getElementById("cols");
@@ -290,33 +234,9 @@ const sizeSelect = document.getElementById("size");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const grid = document.getElementById("grid");
-const bgRemoveToggle = document.getElementById("bgRemoveToggle");
-const bgRemoveSettings = document.getElementById("bgRemoveSettings");
-const bgRemoveStatus = document.getElementById("bgRemoveStatus");
-const toleranceInput = document.getElementById("tolerance");
-const toleranceValue = document.getElementById("toleranceValue");
 const prefixInput = document.getElementById("prefix");
 const fullPreviewSection = document.getElementById("fullPreviewSection");
 const fullPreviewCanvas = document.getElementById("fullPreviewCanvas");
-
-// 去背開關事件
-bgRemoveToggle.addEventListener("click", () => {
-  enableBgRemove = !enableBgRemove;
-  bgRemoveToggle.classList.toggle("active");
-  bgRemoveStatus.textContent = enableBgRemove ? "已啟用" : "未啟用";
-  bgRemoveStatus.style.color = enableBgRemove ? "#16a34a" : "#666";
-  bgRemoveSettings.style.display = enableBgRemove ? "block" : "none";
-  draw();
-});
-
-// 容差滑桿事件
-toleranceInput.addEventListener("input", () => {
-  toleranceValue.textContent = toleranceInput.value;
-  draw();
-});
-
-// 顏色選擇事件
-toleranceInput.addEventListener("change", draw);
 
 file.addEventListener("change", e => {
   const f = e.target.files[0];
@@ -351,14 +271,6 @@ sizeSelect.onchange = () => {
   draw();
 };
 
-// 容差滑桿事件
-toleranceInput.addEventListener("input", () => {
-  toleranceValue.textContent = toleranceInput.value;
-  draw();
-});
-
-
-
 function buildGrid(){
   const cols = Number(colsInput.value);
   const rows = Number(rowsInput.value);
@@ -385,24 +297,6 @@ function getInfo(){
   return {cols, rows, w:Number(w), h:Number(h), prefix};
 }
 
-// 顏色相似度檢查（用於去背）
-function colorDistance(c1, c2) {
-  const dr = c1[0] - c2[0];
-  const dg = c1[1] - c2[1];
-  const db = c1[2] - c2[2];
-  return Math.sqrt(dr*dr + dg*dg + db*db);
-}
-
-// 將 hex 顏色轉為 RGB 陣列
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? [
-    parseInt(result[1], 16),
-    parseInt(result[2], 16),
-    parseInt(result[3], 16)
-  ] : [255, 255, 255];
-}
-
 function drawTo(targetCanvas, index){
   if(!img) return;
   const {cols, rows, w, h} = getInfo();
@@ -410,13 +304,8 @@ function drawTo(targetCanvas, index){
   targetCanvas.height = h;
   const c = targetCanvas.getContext("2d");
   
-  // 清除背景
-  if(enableBgRemove) {
-    c.clearRect(0, 0, w, h);
-  } else {
-    c.fillStyle = "white";
-    c.fillRect(0, 0, w, h);
-  }
+  // 不填非任何背景，保持透明
+  c.clearRect(0, 0, w, h);
 
   const cellW = img.width / cols;
   const cellH = img.height / rows;
@@ -432,15 +321,6 @@ function drawTo(targetCanvas, index){
   const dy = (h - dh) / 2;
 
   c.drawImage(img, sx, sy, cellW, cellH, dx, dy, dw, dh);
-
-  // 去背處理 - 邊界擴散演算法
-  if(enableBgRemove) {
-    const imageData = c.getImageData(0, 0, w, h);
-    const tolerance = Number(toleranceInput.value);
-    floodFillRemoveBackground(imageData, w, h, tolerance);
-    c.putImageData(imageData, 0, 0);
-  }
-}
 }
 
 function draw(){
