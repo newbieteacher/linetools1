@@ -11,6 +11,20 @@
     
     body{font-family:"Microsoft JhengHei",sans-serif;background:#f4f7fb;margin:0;color:#222;font-size:20px}
     header{background:#1e293b;color:white;padding:30px;position:relative;display:flex;justify-content:space-between;align-items:center}
+.float-line{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:9999;
+  background:#06C755;
+  color:white;
+  padding:14px 18px;
+  border-radius:999px;
+  font-size:18px;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
     .header-left h1{margin:0;font-size:48px;font-weight:bold}
     .header-left p{margin:8px 0 0 0;font-size:28px;color:#cbd5e1}
     .version{position:absolute;top:20px;right:30px;background:#ff6b35;color:white;padding:12px 24px;border-radius:12px;font-size:24px;font-weight:bold}
@@ -127,8 +141,39 @@
     <h1>簡老師電腦班</h1>
     <p>LINE貼圖裁切工具</p>
     <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal">一張總表，自動切成多張透明 PNG</p>
+<div style="margin-top:18px;background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:16px;
+font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
+
+  <div>📱 LINE ID：@301FTLVT（記得加 @）</div>
+  <div>☎️ 手機：<a href="tel:0918256089" style="color:#e2e8f0;">0918-256-089</a></div>
+  <div>🏠 地址：新北市板橋區明德街8號2樓</div>
+
+  <!-- LINE官方按鈕 -->
+  <div style="margin-top:10px;">
+    <a href="https://lin.ee/wXZLYUdp" target="_blank">
+      <img src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
+           alt="加入好友" height="44">
+    </a>
   </div>
-  <div class="version">V3.8 簡老師教學版</div>
+
+  <!-- 提示 -->
+  <div style="font-size:16px;margin-top:6px;color:#cbd5e1;">
+    💬 加入後請丟個貼圖或打「+1」喔 😊
+  </div>
+
+  <!-- QR CODE -->
+  <div style="margin-top:12px;display:flex;align-items:center;gap:12px;">
+    <img src="https://qr-official.line.me/gs/M_301ftlvt_GW.png?oat_content=qr"
+         style="width:110px;background:white;padding:6px;border-radius:10px;">
+    <div style="font-size:16px;">
+      📷 掃描加入LINE
+    </div>
+  </div>
+
+</div>
+  </div>
+  <div class="version">V3.9 簡老師教學版</div>
 </header>
 
 <div class="box">
@@ -540,5 +585,6 @@ async function downloadZip(){
   }
 }
 </script>
+<a href="https://lin.ee/wXZLYUdp" target="_blank" class="float-line"> 💬 LINE </a>
 </body>
 </html>
