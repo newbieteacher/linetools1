@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINE 動態貼圖 APNG 製作工具 - 支援大圖裁切</title>
+    <title>LINE 動態貼圖 APNG 製作工具</title>
+   
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/upng-js@2.1.0/UPNG.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.11/pako.min.js"></script>
@@ -21,17 +22,23 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-    <div class="max-w-6xl mx-auto py-8 px-4">
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800">LINE 動態貼圖製作 <span class="text-sm font-normal text-gray-400">v2.0</span></h1>
-                <p class="text-gray-500 mt-1 text-sm">支援單圖上傳與「大圖自動裁切」功能</p>
-            </div>
-            <div class="flex gap-2">
-                <button id="sliceModeBtn" class="bg-blue-50 text-blue-600 border border-blue-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-100 transition-colors">
-                    ✂️ 大圖裁切模式
-                </button>
+   <div class="max-w-6xl mx-auto py-8 px-4">
+
+    <!-- Header -->
+    <div class="border-b pb-4 mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">
+            LINE 動態貼圖製作
+            <span class="text-sm font-normal text-gray-400 ml-3">
+                V1.0 簡老師教學版
+            </span>
+        </h1>
+
+        <p class="text-gray-500 mt-1 text-sm">
+            支援多張圖片合成 LINE 動態貼圖 
+            <span class="font-semibold text-gray-700">(APNG)</span>
+        </p>
+    </div>
+                
                 <div class="bg-line-green text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm">
                     符合 LINE 規範
                 </div>
@@ -49,8 +56,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
                         <p class="text-lg font-bold text-gray-700">點擊或拖放單張/多張 PNG 圖片</p>
-                        <p class="text-sm text-gray-400 mt-2">若要裁切整張序列圖，請使用右上方「大圖裁切模式」</p>
-                    </div>
+                    </div>    
+                     
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -128,38 +135,8 @@
         </div>
     </div>
 
-    <!-- Slicing Modal -->
-    <div id="sliceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden modal p-4">
-        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden">
-            <div class="p-6 border-b flex justify-between items-center">
-                <h3 class="text-xl font-bold text-gray-800">✂️ 大圖裁切精靈</h3>
-                <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-            </div>
-            <div class="p-6 space-y-6">
-                <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-100 rounded-xl p-4 bg-gray-50 min-h-[200px]">
-                    <input type="file" id="sliceInput" class="hidden" accept="image/png">
-                    <div id="slicePreviewContainer" class="hidden w-full overflow-auto max-h-[300px] border rounded bg-white relative">
-                        <img id="sliceTargetImg" class="block mx-auto">
-                        <div id="gridOverlay" class="absolute inset-0 pointer-events-none"></div>
-                    </div>
-                    <button id="selectSliceFileBtn" class="px-6 py-2 bg-white border border-gray-200 rounded-lg shadow-sm font-medium hover:bg-gray-50">選擇大圖檔案</button>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">水平分割 (欄)</label>
-                        <input type="number" id="colsInput" value="4" min="1" class="w-full px-3 py-2 border rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">垂直分割 (列)</label>
-                        <input type="number" id="rowsInput" value="1" min="1" class="w-full px-3 py-2 border rounded-lg">
-                    </div>
-                </div>
-            </div>
-            <div class="p-6 bg-gray-50 flex justify-end gap-3">
-                <button id="cancelSliceBtn" class="px-6 py-2 text-gray-500 font-medium">取消</button>
-                <button id="confirmSliceBtn" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-xl disabled:bg-gray-300" disabled>執行裁切並加入影格</button>
-            </div>
+    
+           
         </div>
     </div>
 
@@ -182,14 +159,7 @@
         const toast = document.getElementById('toast');
         
         // Modal elements
-        const sliceModal = document.getElementById('sliceModal');
-        const sliceInput = document.getElementById('sliceInput');
-        const sliceTargetImg = document.getElementById('sliceTargetImg');
-        const gridOverlay = document.getElementById('gridOverlay');
-        const colsInput = document.getElementById('colsInput');
-        const rowsInput = document.getElementById('rowsInput');
-        const confirmSliceBtn = document.getElementById('confirmSliceBtn');
-
+     
         // Handlers
         dropZone.onclick = () => fileInput.click();
         dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('active'); };
@@ -208,80 +178,14 @@
             previewCard.classList.add('hidden');
         };
 
-        // Modal Logic
-        document.getElementById('sliceModeBtn').onclick = () => sliceModal.classList.remove('hidden');
-        document.getElementById('closeModal').onclick = () => resetSliceModal();
-        document.getElementById('cancelSliceBtn').onclick = () => resetSliceModal();
-        document.getElementById('selectSliceFileBtn').onclick = () => sliceInput.click();
+       
+        
 
-        sliceInput.onchange = async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const dataUrl = await readFileAsDataURL(file);
-            sliceTargetImg.src = dataUrl;
-            document.getElementById('slicePreviewContainer').classList.remove('hidden');
-            document.getElementById('selectSliceFileBtn').classList.add('hidden');
-            confirmSliceBtn.disabled = false;
-            updateGridOverlay();
-        };
+        
 
-        [colsInput, rowsInput].forEach(input => input.oninput = updateGridOverlay);
-
-        function updateGridOverlay() {
-            if (!sliceTargetImg.complete) return;
-            const cols = parseInt(colsInput.value) || 1;
-            const rows = parseInt(rowsInput.value) || 1;
             
-            gridOverlay.style.backgroundSize = `${100/cols}% ${100/rows}%`;
-            gridOverlay.style.backgroundImage = `
-                linear-gradient(to right, rgba(0,195,0,0.3) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0,195,0,0.3) 1px, transparent 1px)
-            `;
-        }
-
-        function resetSliceModal() {
-            sliceModal.classList.add('hidden');
-            sliceInput.value = '';
-            sliceTargetImg.src = '';
-            document.getElementById('slicePreviewContainer').classList.add('hidden');
-            document.getElementById('selectSliceFileBtn').classList.remove('hidden');
-            confirmSliceBtn.disabled = true;
-        }
-
-        confirmSliceBtn.onclick = async () => {
-            const cols = parseInt(colsInput.value) || 1;
-            const rows = parseInt(rowsInput.value) || 1;
-            const total = cols * rows;
-
-            if (frames.length + total > 20) {
-                showToast(`影格數將超過 20 張限制，請減少格數`);
-                return;
-            }
-
-            const img = await loadImage(sliceTargetImg.src);
-            const fw = img.width / cols;
-            const fh = img.height / rows;
-
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = fw;
-            tempCanvas.height = fh;
-            const tCtx = tempCanvas.getContext('2d');
-
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    tCtx.clearRect(0, 0, fw, fh);
-                    tCtx.drawImage(img, c * fw, r * fh, fw, fh, 0, 0, fw, fh);
-                    frames.push({
-                        name: `Slice_${r+1}_${c+1}.png`,
-                        url: tempCanvas.toDataURL('image/png'),
-                        size: 0 // Estimated
-                    });
-                }
-            }
-            renderFrames();
-            resetSliceModal();
-            showToast(`成功裁切並加入 ${total} 個影格`);
-        };
+         
+       
 
         // Core Functions
         function showToast(msg) {
