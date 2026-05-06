@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINE 動態貼圖 APNG 製作工具</title>
+    <title>簡老師動態貼圖APNG工具</title>
    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/upng-js@2.1.0/UPNG.min.js"></script>
@@ -29,7 +29,7 @@
         <h1 class="text-3xl font-bold text-gray-800">
             LINE 動態貼圖製作
             <span class="text-sm font-normal text-gray-400 ml-3">
-                V1.0 簡老師教學版
+                V1.2 簡老師教學版
             </span>
         </h1>
 
@@ -201,11 +201,11 @@
             for (const file of pngFiles) {
                 if (frames.length >= 20) break;
                 const dataUrl = await readFileAsDataURL(file);
-                frames.push({
-                    name: file.name,
-                    url: dataUrl,
-                    size: file.size
-                });
+               frames.push({
+    name: file.name,
+    url: dataUrl,
+    size: file.size
+});
             }
             renderFrames();
         }
