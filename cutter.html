@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LINE貼圖裁切工具</title>
+  <title>簡老師LINE貼圖裁切工具</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
  
   <style>
@@ -13,7 +13,7 @@
 header{
     background:linear-gradient(135deg,#06C755,#00B14F);
     color:white;
-    padding:30px;
+    padding:30px;border:1px solid #d9fbe3;
     position:relative;
     display:flex;
     justify-content:space-between;
@@ -31,12 +31,12 @@ header{
   font-size:18px;
   font-weight:bold;
   text-decoration:none;
-  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+ box-shadow:0 4px 16px rgba(0,0,0,0.08);
 }
     .header-left h1{margin:0;font-size:48px;font-weight:bold}
     .header-left p{margin:8px 0 0 0;font-size:28px;color:#cbd5e1}
     .version{position:absolute;top:20px;right:30px;background:#ff6b35;color:white;padding:12px 24px;border-radius:12px;font-size:24px;font-weight:bold}
-    .box{max-width:1200px;margin:24px auto;background:white;border-radius:20px;padding:30px;box-shadow:0 10px 30px #0001}
+    .box{max-width:1200px;margin:24px auto;background:white;border-radius:20px;border:1px solid #d9fbe3;box-shadow:0 10px 30px #0001}
     .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:30px}
     .step{background:#e0f2fe;padding:18px;border-radius:14px;text-align:center;font-weight:bold;font-size:20px;color:#0369a1}
     .controls-section{background:#f8fafc;padding:24px;border-radius:16px;margin-bottom:24px;border:3px solid #e2e8f0}
@@ -181,7 +181,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
   </div>
-  <div class="version">V4.0 簡老師教學版</div>
+  <div class="version">V4.1 簡老師教學版</div>
 </header>
 
 <div class="box">
@@ -209,6 +209,15 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
         <label>📊 列數（縱向）</label>
         <input type="number" id="rows" value="3" min="1" max="10">
       </div>
+      <div class="control-group">
+    <label>↔ 水平微調</label>
+    <input type="number" id="offsetX" value="0">
+</div>
+
+<div class="control-group">
+    <label>↕ 垂直微調</label>
+    <input type="number" id="offsetY" value="0">
+</div>
       <div class="control-group">
         <label>📐 輸出尺寸</label>
         <select id="size">
@@ -333,6 +342,8 @@ let selected = 0;
 const file = document.getElementById("file");
 const colsInput = document.getElementById("cols");
 const rowsInput = document.getElementById("rows");
+const offsetXInput = document.getElementById("offsetX");
+const offsetYInput = document.getElementById("offsetY");
 const sizeSelect = document.getElementById("size");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -414,8 +425,9 @@ function drawTo(targetCanvas, index){
   const cellH = img.height / rows;
   const col = index % cols;
   const row = Math.floor(index / cols);
-  const sx = col * cellW;
-  const sy = row * cellH;
+ const sx = col * cellW + Number(offsetXInput.value);
+ const sy = row * cellH + Number(offsetYInput.value);
+  
 
   const scale = Math.min(w / cellW, h / cellH);
   const dw = cellW * scale;
