@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LINE貼圖裁切工具</title>
+  <title>簡老師LINE貼圖工具箱</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
  
   <style>
@@ -139,8 +139,8 @@
 <header>
   <div class="header-left">
     <h1>簡老師電腦班</h1>
-    <p>LINE貼圖裁切工具</p>
-    <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal">一張總表，自動切成多張透明 PNG</p>
+    <p>LINE貼圖工具箱</p>
+    <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal">從AI生成、裁切、動畫到上架，一站完成</p>
 <div style="margin-top:18px;background:rgba(255,255,255,0.08);
 border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:16px;
 font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
@@ -173,418 +173,174 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
   </div>
-  <div class="version">V3.9 簡老師教學版</div>
+  <div class="version">V4.5 簡老師教學版</div>
 </header>
 
 <div class="box">
-  <div class="steps">
-    <div class="step">1 上傳圖片</div>
-    <div class="step">2 設定行列</div>
-    <div class="step">3 預覽</div>
-    <div class="step">4 下載 ZIP</div>
-  </div>
+  <h2 style="font-size:36px;margin-bottom:30px;color:#1e293b;">
+🖼 LINE貼圖製作流程
+</h2>
 
-  <!-- 步驟 1 & 2：上傳與基本設定 -->
-  <div class="controls-section">
-    <h2>步驟 1-2：上傳圖片與基本設定</h2>
-    <div class="controls four">
-      <div class="control-group">
-        <label>📤 上傳圖片</label>
-        <input type="file" id="file" accept="image/*">
-        <div class="input-helper">支援 PNG、JPG 等圖片格式</div>
+<!-- 靜態貼圖 -->
+<div style="margin-bottom:50px;">
+  <h3 style="font-size:30px;color:#2563eb;margin-bottom:20px;">
+    🖼 靜態貼圖流程
+  </h3>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+
+    <a href="prompt.html" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🧠<br><br>
+        貼圖咒語生成器
       </div>
-      <div class="control-group">
-        <label>📊 欄數（橫向）</label>
-        <input type="number" id="cols" value="4" min="1" max="10">
+    </a>
+
+    <a href="https://chatgpt.com/" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🤖<br><br>
+        ChatGPT生成貼圖
       </div>
-      <div class="control-group">
-        <label>📊 列數（縱向）</label>
-        <input type="number" id="rows" value="3" min="1" max="10">
+    </a>
+
+    <a href="cutter.html" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        ✂️<br><br>
+        靜態貼圖裁切工具
       </div>
-      <div class="control-group">
-        <label>📐 輸出尺寸</label>
-        <select id="size">
-          <option value="370,320,sticker">貼圖本體 370×320</option>
-          <option value="240,240,main">主圖封面 240×240</option>
-          <option value="96,74,tab">標籤圖 96×74</option>
-        </select>
+    </a>
+
+    <a href="https://www.remove.bg/zh" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        ✨<br><br>
+        remove.bg 去背
       </div>
-    </div>
+    </a>
+
   </div>
-
-  <!-- 檔名設定 -->
-  <div class="controls-section">
-    <h2>檔名設定</h2>
-    <div class="controls">
-      <div class="control-group">
-        <label>📝 檔名前置文字</label>
-        <input type="text" id="prefix" value="貼圖" maxlength="18" placeholder="例：貼圖 或 sticker">
-        <div class="input-helper">中文最多 6 字，英文最多 12 字</div>
-      </div>
-    </div>
-  </div>
-
- 
-
-  <!-- 步驟 4 & 5：預覽與下載 -->
-  <div id="fullPreviewSection" style="display:none;margin-bottom:30px;background:#f8fafc;padding:24px;border-radius:16px;border:3px solid #e2e8f0">
-    <h2>📸 整張原始圖片預覽（未裁切）</h2>
-    <p style="font-size:18px;color:#666;margin:0 0 20px 0">用來確認行列數設定是否正確</p>
-    <canvas id="fullPreviewCanvas" style="background:transparent;border:8px solid white;box-shadow:0 5px 20px #0002;border-radius:16px;max-width:100%;height:auto;display:block;margin:0 auto"></canvas>
-  </div>
-<h2>選擇要預覽的格子</h2>
-<div id="grid" class="grid"></div>
-
- <div class="preview main-area">
-
-  <!-- 右邊：大預覽 -->
-  <div class="preview-right">
-    <h2>預覽（放大）</h2>
-    <canvas id="canvas" width="370" height="320"></canvas>
-  </div>
-
-  <!-- 左邊：操作 -->
-  <div class="preview-left">
-    <h2>步驟 4：下載與去背</h2>
-
-    <button class="btn-primary" onclick="saveToMobile()" style="width:100%;margin-bottom:12px">
-      💾 電腦下載(單張)
-    </button>
-
-    <button class="btn-secondary" onclick="shareImage()" style="width:100%;margin-bottom:12px">
-      📱 存到手機(單張)
-    </button>
-
-    <button onclick="window.open('https://www.remove.bg/upload','_blank')" 
-    style="width:100%;margin-top:12px;padding:16px;background:linear-gradient(135deg,#0284c7,#0369a1);color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;">
-      ✨ 下一步：前往去背（Remove.bg）
-    </button>
-
-    <h2 style="margin-top:20px">步驟 5：整批下載</h2>
-
-    <button class="btn-success" onclick="downloadZip()" 
-    style="width:100%;margin-top:12px;padding:20px;font-size:20px;font-weight:bold;">
-      🎁 整批下載 ZIP（電腦推薦）
-    </button>
-
-    <div class="input-helper" style="margin-top:12px;color:#555;">
-      所有裁切後的貼圖會自動打包成 ZIP 檔下載
-    </div>
-  </div>
-
 </div>
 
-      
-      <div class="info-box" style="margin-top:20px;font-size:18px;padding:16px">
-        <strong>💾 電腦儲存提醒：</strong><br>
-        圖片會存到電腦的「下載」資料夾
+<!-- PNG影格版 -->
+<div style="margin-bottom:50px;">
+  <h3 style="font-size:30px;color:#7c3aed;margin-bottom:20px;">
+    🎞 動態貼圖 PNG影格版
+  </h3>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+
+    <a href="prompt.html" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🧠<br><br>
+        貼圖咒語生成器
       </div>
-      <div class="info-box" style="margin-top:12px;font-size:18px;padding:16px;background:#e0e7ff;border-left-color:#6366f1">
-        <strong>📱 手機分享提醒：</strong><br>
-        分享功能為手機版操作，可分享到 LINE 或其他應用
+    </a>
+
+    <a href="https://chatgpt.com/" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🤖<br><br>
+        ChatGPT生成影格
       </div>
-    </div>
-    
+    </a>
 
+    <a href="cutter.html" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        ✂️<br><br>
+        靜態貼圖裁切工具
+      </div>
+    </a>
 
-<div style="max-width:1200px;margin:20px auto;padding:0 20px;">
+    <a href="https://www.remove.bg/zh" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        ✨<br><br>
+        remove.bg 去背
+      </div>
+    </a>
 
-  <div class="info-box" style="margin-top:20px;font-size:18px;padding:16px">
-    <strong>📌 使用提醒：</strong><br>
-    電腦版LINE請用「另存新檔」<br>
-    不要用複製貼上（會變黑底）<br>
-    IPHONE可用 分享 → 儲存影像，其他手機可分享到相簿
-  </div>
-
-  <div style="margin-top:20px;font-size:18px;">
-    ✨ 此工具專為 LINE 貼圖課設計
-  </div>
-
-  <div style="margin-top:30px;font-size:18px;">
-    <strong>📋 使用步驟：</strong><br><br>
-    ・把貼圖排成一張總表（例如 4欄 × 3列）<br>
-    ・上傳總表圖片<br>
-    ・設定檔名前置及下載<br>
-    ・一鍵下載全部 ZIP
-  </div>
-
-  <div style="margin-top:30px;font-size:18px;">
-    <strong>💡 最佳使用：</strong><br>
-    為求最佳像素請裁切後再去背。
-    簡老師祝大家貼圖大賣！🎉
+    <a href="https://apngasm.sourceforge.net/" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🎞<br><br>
+        APNG工具
+      </div>
+    </a>
 
   </div>
-
 </div>
- 
 
-<script>
-let img = null;
-let selected = 0;
+<!-- Canva版 -->
+<div style="margin-bottom:50px;">
+  <h3 style="font-size:30px;color:#db2777;margin-bottom:20px;">
+    🎬 Canva動態貼圖版
+  </h3>
 
-const file = document.getElementById("file");
-const colsInput = document.getElementById("cols");
-const rowsInput = document.getElementById("rows");
-const sizeSelect = document.getElementById("size");
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const grid = document.getElementById("grid");
-const prefixInput = document.getElementById("prefix");
-const fullPreviewSection = document.getElementById("fullPreviewSection");
-const fullPreviewCanvas = document.getElementById("fullPreviewCanvas");
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
 
-file.addEventListener("change", e => {
-  const f = e.target.files[0];
-  if (!f) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    img = new Image();
-    img.onload = () => {
-      selected = 0;
-      buildGrid();
-      draw();
-      drawFullPreview();
-      fullPreviewSection.style.display = "block";
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(f);
-});
+    <a href="prompt.html" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🧠<br><br>
+        貼圖咒語生成器
+      </div>
+    </a>
 
-colsInput.oninput = () => {
-  buildGrid();
-  drawFullPreview();
-};
-rowsInput.oninput = () => {
-  buildGrid();
-  drawFullPreview();
-};
-sizeSelect.onchange = () => {
-  const [w,h] = sizeSelect.value.split(",");
-  canvas.width = Number(w);
-  canvas.height = Number(h);
-  draw();
-};
+    <a href="https://www.canva.com/" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🎨<br><br>
+        Canva動畫
+      </div>
+    </a>
 
-function buildGrid(){
-  const cols = Number(colsInput.value);
-  const rows = Number(rowsInput.value);
-  grid.style.gridTemplateColumns = `repeat(${cols},1fr)`;
-  grid.innerHTML = "";
-  for(let i=0;i<cols*rows;i++){
-    const div = document.createElement("div");
-    div.className = "cell" + (i===selected ? " active" : "");
-    div.textContent = (i + 1);
-    div.onclick = () => {
-      selected = i;
-      buildGrid();
-      draw();
-    };
-    grid.appendChild(div);
-  }
-  draw();
-}
+    <a href="mp4-to-png.html" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🎬<br><br>
+        MP4轉PNG工具
+      </div>
+    </a>
 
-function getInfo(){
-  const cols = Number(colsInput.value);
-  const rows = Number(rowsInput.value);
-  const [w,h,prefix] = sizeSelect.value.split(",");
-  return {cols, rows, w:Number(w), h:Number(h), prefix};
-}
+    <a href="https://www.remove.bg/zh" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        ✨<br><br>
+        remove.bg 去背
+      </div>
+    </a>
 
-function drawTo(targetCanvas, index){
-  if(!img) return;
-  const {cols, rows, w, h} = getInfo();
-  targetCanvas.width = w;
-  targetCanvas.height = h;
-  const c = targetCanvas.getContext("2d");
+    <a href="https://apngasm.sourceforge.net/" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        🎞<br><br>
+        APNG工具
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- 其他工具 -->
+<div>
+  <h3 style="font-size:30px;color:#ea580c;margin-bottom:20px;">
+    🧰 其他工具
+  </h3>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+
+    <a href="https://nukesaq88.github.io/Pngyu/影像壓縮" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        📦<br><br>
+        PNG影像壓縮
+      </div>
+    </a>
+
+    <a href="https://creator.line.me/zh-hant/" target="_blank" style="text-decoration:none;">
+      <div class="step" style="padding:30px;">
+        ☁️<br><br>
+        LINE上架網站
+      </div>
+    </a>
+
+  </div>
+</div>
   
-  // 不填非任何背景，保持透明
-  c.clearRect(0, 0, w, h);
+  </div>
 
-  const cellW = img.width / cols;
-  const cellH = img.height / rows;
-  const col = index % cols;
-  const row = Math.floor(index / cols);
-  const sx = col * cellW;
-  const sy = row * cellH;
+  
 
-  const scale = Math.min(w / cellW, h / cellH);
-  const dw = cellW * scale;
-  const dh = cellH * scale;
-  const dx = (w - dw) / 2;
-  const dy = (h - dh) / 2;
-
-  c.drawImage(img, sx, sy, cellW, cellH, dx, dy, dw, dh);
-}
-
-function draw(){
-  drawTo(canvas, selected);
-}
-
-function drawFullPreview(){
-  if(!img) return;
-  const {cols, rows} = getInfo();
-  
-  // 設定 canvas 尺寸與原圖相同
-  fullPreviewCanvas.width = img.width;
-  fullPreviewCanvas.height = img.height;
-  
-  const c = fullPreviewCanvas.getContext("2d");
-  
-  // 繪製原始圖片
-  c.drawImage(img, 0, 0);
-  
-  // 繪製網格線
-  c.strokeStyle = "rgba(0, 0, 0, 0.3)";
-  c.lineWidth = 2;
-  
-  const cellW = img.width / cols;
-  const cellH = img.height / rows;
-  
-  // 繪製垂直線
-  for(let i = 1; i < cols; i++) {
-    c.beginPath();
-    c.moveTo(i * cellW, 0);
-    c.lineTo(i * cellW, img.height);
-    c.stroke();
-  }
-  
-  // 繪製水平線
-  for(let i = 1; i < rows; i++) {
-    c.beginPath();
-    c.moveTo(0, i * cellH);
-    c.lineTo(img.width, i * cellH);
-    c.stroke();
-  }
-}
-
-function filename(index){
-  const customPrefix = prefixInput.value.trim() || "貼圖";
-  return `${customPrefix}${String(index+1).padStart(2,"0")}.png`;
-}
-
-// 獲取 Canvas 為 Blob
-async function canvasToBlob(canvasElement) {
-  return new Promise(resolve => {
-    // 移除 canvas 的背景樣式以確保透明
-    const originalBg = canvasElement.style.background;
-    canvasElement.style.background = "none";
-    canvasElement.toBlob(blob => {
-      canvasElement.style.background = originalBg;
-      resolve(blob);
-    }, "image/png");
-  });
-}
-
-function saveToMobile(){
-  if(!img) return alert("❌ 請先上傳圖片");
-  draw();
-  
-  // 臨時移除背景以確保導出純透明 PNG
-  const originalBg = canvas.style.background;
-  canvas.style.background = "none";
-  const dataUrl = canvas.toDataURL("image/png");
-  canvas.style.background = originalBg;
-  
-  const a = document.createElement("a");
-  a.download = filename(selected);
-  a.href = dataUrl;
-  a.click();
-}
-
-async function shareImage(){
-  if(!img) return alert("❌ 請先上傳圖片");
-  
-  draw();
-  
-  // 檢查瀏覽器是否支援 Web Share API
-  if(navigator.share) {
-    try {
-      // 轉換 canvas 為 blob
-      const blob = await canvasToBlob(canvas);
-      const file = new File([blob], filename(selected), { type: "image/png" });
-      
-      // 使用 Web Share API
-      await navigator.share({
-        files: [file],
-        title: "LINE貼圖",
-        text: "分享我用裁切工具製作的貼圖"
-      });
-    } catch(err) {
-      if(err.name !== "AbortError") {
-        console.error("分享失敗:", err);
-        alert("❌ 分享失敗，請改用下載功能");
-      }
-    }
-  } else if(navigator.canShare && navigator.canShare({files:[]})) {
-    // 某些瀏覽器支援 files 分享
-    try {
-      const blob = await canvasToBlob(canvas);
-      const file = new File([blob], filename(selected), { type: "image/png" });
-      
-      await navigator.share({
-        files: [file],
-        title: "LINE貼圖",
-        text: "分享我用裁切工具製作的貼圖"
-      });
-    } catch(err) {
-      if(err.name !== "AbortError") {
-        // 降級為下載
-        saveToMobile();
-      }
-    }
-  } else {
-    // 不支援分享，改用下載
-    alert("ℹ️ 您的瀏覽器不支援分享功能，改為下載");
-    saveToMobile();
-  }
-}
-
-async function downloadZip(){
-  if(!img) return alert("❌ 請先上傳圖片");
-  
-  // 禁用按鈕並顯示處理中提示
-  const btn = event.target;
-  const originalText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = "⏳ 正在打包 ZIP...";
-  
-  try {
-    const {cols, rows} = getInfo();
-    const zip = new JSZip();
-    const temp = document.createElement("canvas");
-    // 確保臨時 canvas 沒有背景樣式
-    temp.style.background = "none";
-
-    for(let i=0;i<cols*rows;i++){
-      drawTo(temp, i);
-      // 移除背景以確保導出純透明 PNG
-      const originalBg = temp.style.background;
-      temp.style.background = "none";
-      const data = temp.toDataURL("image/png").split(",")[1];
-      temp.style.background = originalBg;
-      zip.file(filename(i), data, {base64:true});
-    }
-
-    const blob = await zip.generateAsync({type:"blob"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "LINE貼圖裁切結果.zip";
-    a.click();
-    
-    btn.textContent = "✅ 下載完成！";
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.disabled = false;
-    }, 2000);
-  } catch(err) {
-    alert("❌ 下載失敗：" + err.message);
-    btn.textContent = originalText;
-    btn.disabled = false;
-  }
-}
-</script>
 <a href="https://lin.ee/wXZLYUdp" target="_blank" class="float-line"> 💬 LINE </a>
 </body>
 </html>
