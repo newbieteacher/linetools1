@@ -181,7 +181,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
   </div>
-  <div class="version">V1.3 簡老師教學版</div>
+  <div class="version">V1.5 簡老師教學版</div>
 </header>
 
 <div class="box">
@@ -287,7 +287,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 </div>
 <div class="controls-section">
 
-  <h2>🎬 Canva 動態貼圖影片咒語公版</h2>
+  <h2>🎬 Canva 動態貼圖咒語生成</h2>
   <div class="controls" style="margin-top:20px;">
 
   <div class="control-group">
@@ -395,24 +395,12 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
 
-  <textarea id="canvaPrompt"
-  style="width:100%;height:320px;padding:20px;
-  border-radius:16px;border:2px solid #cbd5e1;
-  font-size:18px;font-family:Microsoft JhengHei;line-height:1.8;">
-
-LINE animated sticker style, square composition, medium close-up, large character, occupy 70% of the frame, character centered, single character, minimal movement, transparent background style, character fixed in the center, no camera movement, do not crop the head or hands, keep safe margins around all content, no elements near the edges, simple looping motion, cute chibi sticker style, clean outline, stable character consistency, keep the text unchanged, keep the character design unchanged, leave at least 10px safe margin around all content.
-
-LINE動態貼圖風格、方形構圖、中近景、大角色、角色佔畫面70%、角色置中、單一角色、小幅度動作、透明背景風格、角色固定在畫面中央、不要鏡頭移動、不要切到頭和手、所有內容保留安全邊界、不要貼近畫面邊緣、簡單循環動作、可愛Q版貼圖風格、乾淨描邊、角色一致性穩定、文字保持不變、人物造型保持不變、所有內容四周至少保留10px安全邊界。
-
-  </textarea>
-
-  <button class="btn-success"
-  onclick="copyCanvaPrompt()"
-  style="width:100%;margin-top:20px;">
-
-    📋 複製 Canva 動態貼圖公版
-
-  </button>
+  
+ <button class="btn-success"
+onclick="generateCanvaPrompt()"
+style="width:100%;margin-top:20px;">
+  🎬 生成 Canva 動態貼圖咒語
+</button>
 
 </div>
 <div class="controls-section">
@@ -518,8 +506,7 @@ function copyPrompt(){
 
   alert("📋 咒語已複製！");
 }
-function copyCanvaPrompt(){
-
+function generateCanvaPrompt(){
 
   const motion =
   document.getElementById("canvaMotion").value;
@@ -530,16 +517,7 @@ LINE animated sticker style, square composition, medium close-up, large characte
 LINE動態貼圖風格、方形構圖、中近景、大角色、角色佔畫面70%、角色置中、單一角色、小幅度動作、透明背景風格、角色固定在畫面中央、不要鏡頭移動、不要切到頭和手、所有內容保留安全邊界、不要貼近畫面邊緣、簡單循環動作、可愛Q版貼圖風格、乾淨描邊、角色一致性穩定、文字保持不變、人物造型保持不變、所有內容四周至少保留10px安全邊界。
 `;
 
-  const output =
-  document.getElementById("canvaPrompt");
-
-  output.value = prompt;
-
-  output.select();
-
-  navigator.clipboard.writeText(prompt);
-
-  alert("📋 Canva 動態貼圖咒語已生成並複製！");
+  document.getElementById("output").value = prompt;
 }
 </script>
  
