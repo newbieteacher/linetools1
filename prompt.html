@@ -181,7 +181,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
   </div>
-  <div class="version">V1.2 簡老師教學版</div>
+  <div class="version">V1.3 簡老師教學版</div>
 </header>
 
 <div class="box">
@@ -262,7 +262,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
  <option>揮手</option>
  <option>點頭</option>
  <option>左右搖晃</option>
- option>比讚</option>
+ <option>比讚</option>
  <option>拍手</option>
  <option>招手</option>
  <option>愛心跳動</option>
@@ -285,7 +285,136 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
     🎥 生成動態貼圖咒語
   </button>
 </div>
+<div class="controls-section">
 
+  <h2>🎬 Canva 動態貼圖影片咒語公版</h2>
+  <div class="controls" style="margin-top:20px;">
+
+  <div class="control-group">
+
+    <label>🎞️ Canva動畫動作</label>
+
+    <select id="canvaMotion">
+
+      <option value="smiling gently">微笑</option>
+      <option value="waving hand">揮手</option>
+      <option value="nodding">點頭</option>
+      <option value="swaying side to side">左右搖晃</option>
+      <option value="small bouncing motion">輕微彈跳</option>
+      <option value="gentle blinking">眨眼</option>
+      <option value="slight head tilt">歪頭</option>
+      <option value="looking around curiously">好奇左右看</option>
+      <option value="raising one finger while asking">舉手詢問</option>
+      <option value="small questioning gesture">疑問手勢</option>
+
+      <option value="making heart gesture">比愛心</option>
+      <option value="heart popping animation">愛心跳出</option>
+      <option value="blowing kiss">飛吻</option>
+      <option value="shy pose">害羞</option>
+      <option value="hands close to chest">雙手抱胸</option>
+
+      <option value="clapping hands softly">輕輕拍手</option>
+      <option value="thumbs up gesture">比讚</option>
+      <option value="small fist pump">加油揮拳</option>
+      <option value="excited bouncing motion">開心跳一下</option>
+
+      <option value="crying softly">哭哭</option>
+      <option value="wiping tears">擦眼淚</option>
+
+      <option value="angry reaction">生氣反應</option>
+      <option value="pouting face">鼓臉</option>
+      <option value="small angry stomp">小跺腳</option>
+
+      <option value="sleepy eyes">想睡眼神</option>
+      <option value="small yawning motion">打哈欠</option>
+      <option value="sleeping motion">睡覺動作</option>
+
+      <option value="surprised reaction">驚訝反應</option>
+      <option value="slight shaking motion">嚇到抖一下</option>
+
+      <option value="cute idle animation">可愛待機動作</option>
+
+      <option value="welcoming gesture">歡迎光臨</option>
+      <option value="introducing product with both hands">
+商品介紹
+</option>
+
+      <option value="holding sale sign happily">
+優惠推薦
+</option>
+
+      <option value="pointing at text">指向文字</option>
+
+      <option value="showing discount excitedly">
+限時優惠
+</option>
+
+      <option value="thumbs up customer service pose">
+客服推薦
+</option>
+
+      <option value="typing customer service reply">
+客服回覆中
+</option>
+
+      <option value="holding package happily">
+出貨中
+</option>
+
+      <option value="waving goodbye politely">
+謝謝光臨
+</option>
+
+      <option value="bowing politely">
+感謝支持
+</option>
+
+      <option value="holding heart sign gratefully">
+感謝下單
+</option>
+
+      <option value="pointing upward for announcement">
+重要公告
+</option>
+
+      <option value="holding smartphone happily">
+加入LINE
+</option>
+
+      <option value="showing QR code gesture">
+掃碼加入
+</option>
+
+      <option value="small celebration motion">
+成交慶祝
+</option>
+
+    </select>
+
+  </div>
+
+</div>
+
+  <textarea id="canvaPrompt"
+  style="width:100%;height:320px;padding:20px;
+  border-radius:16px;border:2px solid #cbd5e1;
+  font-size:18px;font-family:Microsoft JhengHei;line-height:1.8;">
+
+LINE animated sticker style, square composition, medium close-up, large character, occupy 70% of the frame, character centered, single character, minimal movement, transparent background style, character fixed in the center, no camera movement, do not crop the head or hands, keep safe margins around all content, no elements near the edges, simple looping motion, cute chibi sticker style, clean outline, stable character consistency, keep the text unchanged, keep the character design unchanged, leave at least 10px safe margin around all content.
+
+LINE動態貼圖風格、方形構圖、中近景、大角色、角色佔畫面70%、角色置中、單一角色、小幅度動作、透明背景風格、角色固定在畫面中央、不要鏡頭移動、不要切到頭和手、所有內容保留安全邊界、不要貼近畫面邊緣、簡單循環動作、可愛Q版貼圖風格、乾淨描邊、角色一致性穩定、文字保持不變、人物造型保持不變、所有內容四周至少保留10px安全邊界。
+
+  </textarea>
+
+  <button class="btn-success"
+  onclick="copyCanvaPrompt()"
+  style="width:100%;margin-top:20px;">
+
+    📋 複製 Canva 動態貼圖公版
+
+  </button>
+
+</div>
 <div class="controls-section">
   <h2>📋 Prompt輸出</h2>
 
@@ -389,7 +518,29 @@ function copyPrompt(){
 
   alert("📋 咒語已複製！");
 }
+function copyCanvaPrompt(){
 
+
+  const motion =
+  document.getElementById("canvaMotion").value;
+
+  const prompt = `
+LINE animated sticker style, square composition, medium close-up, large character, occupy 70% of the frame, character centered, single character, minimal movement, transparent background style, character fixed in the center, no camera movement, do not crop the head or hands, keep safe margins around all content, no elements near the edges, simple looping motion, ${motion}, cute chibi sticker style, clean outline, stable character consistency, keep the text unchanged, keep the character design unchanged, leave at least 10px safe margin around all content.
+
+LINE動態貼圖風格、方形構圖、中近景、大角色、角色佔畫面70%、角色置中、單一角色、小幅度動作、透明背景風格、角色固定在畫面中央、不要鏡頭移動、不要切到頭和手、所有內容保留安全邊界、不要貼近畫面邊緣、簡單循環動作、可愛Q版貼圖風格、乾淨描邊、角色一致性穩定、文字保持不變、人物造型保持不變、所有內容四周至少保留10px安全邊界。
+`;
+
+  const output =
+  document.getElementById("canvaPrompt");
+
+  output.value = prompt;
+
+  output.select();
+
+  navigator.clipboard.writeText(prompt);
+
+  alert("📋 Canva 動態貼圖咒語已生成並複製！");
+}
 </script>
  
 <a href="https://lin.ee/wXZLYUdp" target="_blank" class="float-line"> 💬 LINE </a>
