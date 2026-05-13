@@ -189,6 +189,26 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
   <h2>🖼️ 靜態貼圖咒語生成</h2>
 
   <div class="controls">
+    <div class="control-group">
+  <label>② 生成方式</label>
+  <select id="generateMode" onchange="toggleCharacterType()">
+    <option>AI直接生成</option>
+    <option>依上傳圖片生成</option>
+  </select>
+</div>
+
+<div class="control-group" id="characterTypeGroup">
+  <label>③ 主角類型</label>
+  <select id="characterType">
+    <option>人物</option>
+    <option>Q版人物</option>
+    <option>公仔</option>
+    <option>黏土娃娃</option>
+    <option>毛絨娃娃</option>
+    <option>動物</option>
+    <option>純文字貼圖</option>
+  </select>
+</div>
 
     <div class="control-group">
       <label>🎨 貼圖風格</label>
@@ -242,6 +262,26 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
         <option>無文字</option>
       </select>
     </div>
+    <div class="control-group">
+  <label>⑧ 背景處理方式</label>
+  <select id="backgroundType">
+    <option>公版淺灰背景（推薦）</option>
+    <option>純白背景（推薦）</option>
+    <option>方便去背背景</option>
+    <option>透明背景風格</option>
+    <option>柔色背景</option>
+    <option>場景背景</option>
+  </select>
+</div>
+
+<div class="control-group">
+  <label>⑨ 貼圖數量</label>
+  <select id="stickerCount">
+    <option value="8|4×2">8張｜4×2宮格</option>
+    <option value="16|4×4">16張｜4×4宮格</option>
+    <option value="24|4×6">24張｜4×6宮格</option>
+  </select>
+</div>
 
   </div>
 
@@ -431,14 +471,56 @@ style="width:100%;margin-top:20px;">
 
 <script>
 
+function toggleCharacterType(){
+  const mode = document.getElementById("generateMode").value;
+  const group = document.getElementById("characterTypeGroup");
+
+  if(mode === "AI直接生成"){
+    group.style.display = "flex";
+  } else {
+    group.style.display = "none";
+  }
+}
+
 function generateStaticPrompt(){
 
+  const mode = document.getElementById("generateMode").value;
+  const characterType = document.getElementById("characterType").value;
   const style = document.getElementById("style").value;
   const theme = document.getElementById("theme").value;
   const fontStyle = document.getElementById("fontStyle").value;
+  const backgroundType = document.getElementById("backgroundType").value;
+
+  const countInfo = document.getElementById("stickerCount").value.split("|");
+  const stickerCount = countInfo[0];
+  const gridLayout = countInfo[1];
+
+  let characterText = "";
+
+  if(mode === "AI直接生成"){
+    characterText = `
+主角類型：
+${characterType}
+
+請依主角類型自行設計適合的可愛角色。
+`;
+  } else {
+    characterText = `
+生成方式：
+依上傳圖片生成。
+
+請依照上傳圖片中的角色進行設計，
+保持人物造型、髮型、服裝、配色與整體風格一致。
+`;
+  }
 
   const prompt = `
 請生成 LINE貼圖風格圖片。
+
+生成方式：
+${mode}
+
+${characterText}
 
 風格：
 ${style}
@@ -449,18 +531,35 @@ ${theme}
 文字風格：
 ${fontStyle}
 
+背景處理方式：
+${backgroundType}
+
+貼圖數量：
+${stickerCount} 張
+
+排列方式：
+請以 ${gridLayout} 宮格排列輸出。
+
+每一格都是一張獨立貼圖，
 角色置中，
 四周保留適當留白，
 線條清楚，
 表情明顯，
+文字清楚好讀，
 適合手機小畫面觀看，
-維持角色一致性，
-適合 LINE 靜態貼圖使用。
+適合後續裁切成 LINE 靜態貼圖。
+
+如果背景選擇「公版淺灰背景（推薦）」，
+請使用乾淨淺灰色背景，
+方便後續去背處理。
+
+請完整輸出 ${stickerCount} 張貼圖，
+不要少圖，
+不要重複同一張。
 `;
 
   document.getElementById("output").value = prompt;
 }
-
 function generateMotionPrompt(){
 
   const motion = document.getElementById("motion").value;
@@ -524,6 +623,7 @@ LINE動態貼圖風格、方形構圖、中近景、大角色、角色佔畫面7
 
   document.getElementById("output").value = prompt;
 }
+toggleCharacterType();
 </script>
  
 <a href="https://lin.ee/wXZLYUdp" target="_blank" class="float-line"> 💬 LINE </a>
