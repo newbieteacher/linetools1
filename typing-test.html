@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>中文打字練習｜簡老師電腦基礎練習站</title>
+
+<style>
+    .home-link{
+  color:white;
+  text-decoration:none;
+}
+
+.home-link:hover{
+  opacity:0.9;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:"Microsoft JhengHei",sans-serif;
+  background:#f4f7fb;
+  color:#222;
+}
+
+/* 公版抬頭 */
+header{
+  background:#1e293b;
+  color:white;
+  padding:30px;
+  position:relative;
+}
+
+.header-left h1{
+  margin:0;
+  font-size:48px;
+  font-weight:bold;
+}
+
+.header-left p{
+  margin:8px 0 0 0;
+  font-size:28px;
+  color:#cbd5e1;
+}
+
+.version{
+  position:absolute;
+  top:20px;
+  right:30px;
+  background:#ff6b35;
+  color:white;
+  padding:12px 24px;
+  border-radius:12px;
+  font-size:24px;
+  font-weight:bold;
+}
+
+.teacher-info{
+  margin-top:18px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:16px;
+  padding:16px;
+  font-size:20px;
+  line-height:1.8;
+  color:#e2e8f0;
+  max-width:700px;
+}
+
+.teacher-info a{color:#e2e8f0}
+
+.page-title{
+  text-align:center;
+  font-size:38px;
+  font-weight:bold;
+  padding:28px 10px 10px;
+  color:#1e293b;
+}
+
+.page-subtitle{
+  text-align:center;
+  font-size:24px;
+  color:#555;
+  margin-bottom:20px;
+  line-height:1.7;
+}
+
+.info{
+  display:flex;
+  justify-content:center;
+  gap:24px;
+  flex-wrap:wrap;
+  padding:10px 20px 20px;
+}
+
+.card{
+  background:white;
+  padding:20px 40px;
+  border-radius:24px;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.label{
+  font-size:24px;
+  color:#666;
+}
+
+.value{
+  font-size:48px;
+  color:#06C755;
+  font-weight:bold;
+}
+
+.practice-box{
+  width:90%;
+  max-width:1000px;
+  margin:20px auto;
+  background:white;
+  border-radius:30px;
+  padding:35px;
+  text-align:center;
+  box-shadow:0 6px 20px rgba(0,0,0,0.1);
+}
+
+.word{
+  font-size:72px;
+  font-weight:bold;
+  color:#1e293b;
+  margin-bottom:12px;
+}
+
+.bopomofo{
+  font-size:34px;
+  color:#64748b;
+  margin-bottom:25px;
+  letter-spacing:4px;
+}
+
+input{
+  width:100%;
+  max-width:700px;
+  font-size:38px;
+  padding:20px;
+  border-radius:20px;
+  border:3px solid #cbd5e1;
+  text-align:center;
+  font-family:"Microsoft JhengHei",sans-serif;
+}
+
+input:focus{
+  outline:none;
+  border-color:#06C755;
+  box-shadow:0 0 0 4px rgba(6,199,85,0.15);
+}
+
+.btn-area{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  flex-wrap:wrap;
+  margin:25px auto;
+  width:90%;
+  max-width:900px;
+}
+
+button{
+  border:none;
+  padding:20px 36px;
+  border-radius:999px;
+  font-size:28px;
+  font-weight:bold;
+  cursor:pointer;
+  font-family:"Microsoft JhengHei",sans-serif;
+}
+
+.startBtn{background:#06C755;color:white}
+.soundBtn{background:#2563eb;color:white}
+.resetBtn{background:#ddd;color:#333}
+
+.message{
+  text-align:center;
+  font-size:26px;
+  color:#666;
+  line-height:1.8;
+  padding:20px 20px 90px;
+}
+
+.float-line{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:9999;
+  background:#06C755;
+  color:white;
+  padding:14px 18px;
+  border-radius:999px;
+  font-size:18px;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+
+@media(max-width:768px){
+  header{
+    padding:20px;
+    text-align:center;
+  }
+
+  .header-left h1{font-size:34px}
+  .header-left p{font-size:22px}
+
+  .version{
+    position:static;
+    display:inline-block;
+    margin-top:14px;
+    font-size:18px;
+  }
+
+  .teacher-info{font-size:17px}
+
+  .page-title{font-size:30px}
+  .page-subtitle{font-size:20px}
+
+  .value{font-size:38px}
+
+  .practice-box{padding:24px}
+
+  .word{font-size:54px}
+  .bopomofo{font-size:26px}
+
+  input{font-size:30px}
+
+  button{
+    width:90%;
+    font-size:24px;
+    padding:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-left">
+
+   <h1>
+  <a href="index.html" class="home-link">
+    簡老師電腦班
+  </a>
+</h1>
+
+    <p>電腦基礎練習站</p>
+
+    <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal;">
+      滑鼠、打字、電腦操作，第一次學也沒關係
+    </p>
+
+    <div class="teacher-info">
+      <div>📱 LINE ID：@301FTLVT（記得加 @）</div>
+
+      <div>
+        ☎️ 手機：
+        <a href="tel:0918256089">0918-256-089</a>
+      </div>
+
+      <div>🏠 地址：新北市板橋區明德街8號2樓</div>
+
+      <div style="margin-top:10px;">
+        <a href="https://lin.ee/wXZLYUdp" target="_blank">
+          <img src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
+               alt="加入好友" height="44">
+        </a>
+      </div>
+
+      <div style="font-size:16px;margin-top:6px;color:#cbd5e1;">
+        💬 加入後請丟個貼圖或打「+1」喔 😊
+      </div>
+    </div>
+
+  </div>
+
+  <div class="version">
+    V1.0 初學友善版
+  </div>
+</header>
+
+<div class="page-title">
+  ⌨️ 中文生活打字練習
+</div>
+
+<div class="page-subtitle">
+  看中文字、看注音，也可以按語音聽發音<br>
+  打對後會自動換下一題，限時一分鐘
+</div>
+
+<div class="info">
+  <div class="card">
+    <div class="label">剩餘時間</div>
+    <div class="value" id="timer">60</div>
+  </div>
+
+  <div class="card">
+    <div class="label">打對字數</div>
+    <div class="value" id="charCount">0</div>
+  </div>
+
+  <div class="card">
+    <div class="label">完成題數</div>
+    <div class="value" id="wordCount">0</div>
+  </div>
+</div>
+
+<div class="practice-box">
+  <div class="word" id="word">準備開始</div>
+  <div class="bopomofo" id="bopomofo">按下開始練習</div>
+
+  <input id="typingInput" type="text" placeholder="請在這裡打字" disabled>
+</div>
+
+<div class="btn-area">
+  <button class="startBtn" id="startBtn">開始練習</button>
+  <button class="soundBtn" id="soundBtn">🔊 唸給我聽</button>
+  <button class="resetBtn" id="resetBtn">重新開始</button>
+</div>
+
+<div class="message">
+  💚 我們不用很厲害才開始<br>
+  💚 只要開始就很厲害
+</div>
+
+<a href="https://lin.ee/wXZLYUdp" target="_blank" class="float-line">
+  💬 LINE
+</a>
+
+<script>
+const words = [
+  {word:"蘋果",bopomofo:"ㄆㄧㄥˊ ㄍㄨㄛˇ"},
+  {word:"香蕉",bopomofo:"ㄒㄧㄤ ㄐㄧㄠ"},
+  {word:"葡萄",bopomofo:"ㄆㄨˊ ㄊㄠˊ"},
+  {word:"西瓜",bopomofo:"ㄒㄧ ㄍㄨㄚ"},
+  {word:"草莓",bopomofo:"ㄘㄠˇ ㄇㄟˊ"},
+  {word:"橘子",bopomofo:"ㄐㄩˊ ㄗ˙"},
+  {word:"鳳梨",bopomofo:"ㄈㄥˋ ㄌㄧˊ"},
+  {word:"芒果",bopomofo:"ㄇㄤˊ ㄍㄨㄛˇ"},
+  {word:"早餐",bopomofo:"ㄗㄠˇ ㄘㄢ"},
+  {word:"午餐",bopomofo:"ㄨˇ ㄘㄢ"},
+  {word:"晚餐",bopomofo:"ㄨㄢˇ ㄘㄢ"},
+  {word:"便當",bopomofo:"ㄅㄧㄢˋ ㄉㄤ"},
+  {word:"飯糰",bopomofo:"ㄈㄢˋ ㄊㄨㄢˊ"},
+  {word:"麵包",bopomofo:"ㄇㄧㄢˋ ㄅㄠ"},
+  {word:"蛋糕",bopomofo:"ㄉㄢˋ ㄍㄠ"},
+  {word:"奶茶",bopomofo:"ㄋㄞˇ ㄔㄚˊ"},
+  {word:"豆漿",bopomofo:"ㄉㄡˋ ㄐㄧㄤ"},
+  {word:"咖啡",bopomofo:"ㄎㄚ ㄈㄟ"},
+  {word:"開水",bopomofo:"ㄎㄞ ㄕㄨㄟˇ"},
+  {word:"茶杯",bopomofo:"ㄔㄚˊ ㄅㄟ"},
+  {word:"公園",bopomofo:"ㄍㄨㄥ ㄩㄢˊ"},
+  {word:"學校",bopomofo:"ㄒㄩㄝˊ ㄒㄧㄠˋ"},
+  {word:"市場",bopomofo:"ㄕˋ ㄔㄤˇ"},
+  {word:"超市",bopomofo:"ㄔㄠ ㄕˋ"},
+  {word:"醫院",bopomofo:"ㄧ ㄩㄢˋ"},
+  {word:"餐廳",bopomofo:"ㄘㄢ ㄊㄧㄥ"},
+  {word:"車站",bopomofo:"ㄔㄜ ㄓㄢˋ"},
+  {word:"捷運",bopomofo:"ㄐㄧㄝˊ ㄩㄣˋ"},
+  {word:"街道",bopomofo:"ㄐㄧㄝ ㄉㄠˋ"},
+  {word:"銀行",bopomofo:"ㄧㄣˊ ㄏㄤˊ"},
+  {word:"老師",bopomofo:"ㄌㄠˇ ㄕ"},
+  {word:"學生",bopomofo:"ㄒㄩㄝˊ ㄕㄥ"},
+  {word:"朋友",bopomofo:"ㄆㄥˊ ㄧㄡˇ"},
+  {word:"同學",bopomofo:"ㄊㄨㄥˊ ㄒㄩㄝˊ"},
+  {word:"媽媽",bopomofo:"ㄇㄚ ㄇㄚ"},
+  {word:"爸爸",bopomofo:"ㄅㄚˋ ㄅㄚ"},
+  {word:"哥哥",bopomofo:"ㄍㄜ ㄍㄜ"},
+  {word:"姊姊",bopomofo:"ㄐㄧㄝˇ ㄐㄧㄝˇ"},
+  {word:"妹妹",bopomofo:"ㄇㄟˋ ㄇㄟˋ"},
+  {word:"家人",bopomofo:"ㄐㄧㄚ ㄖㄣˊ"},
+  {word:"洗手",bopomofo:"ㄒㄧˇ ㄕㄡˇ"},
+  {word:"洗澡",bopomofo:"ㄒㄧˇ ㄗㄠˇ"},
+  {word:"睡覺",bopomofo:"ㄕㄨㄟˋ ㄐㄧㄠˋ"},
+  {word:"起床",bopomofo:"ㄑㄧˇ ㄔㄨㄤˊ"},
+  {word:"回家",bopomofo:"ㄏㄨㄟˊ ㄐㄧㄚ"},
+  {word:"出門",bopomofo:"ㄔㄨ ㄇㄣˊ"},
+  {word:"散步",bopomofo:"ㄙㄢˋ ㄅㄨˋ"},
+  {word:"唱歌",bopomofo:"ㄔㄤˋ ㄍㄜ"},
+  {word:"跳舞",bopomofo:"ㄊㄧㄠˋ ㄨˇ"},
+  {word:"旅行",bopomofo:"ㄌㄩˇ ㄒㄧㄥˊ"},
+  {word:"照片",bopomofo:"ㄓㄠˋ ㄆㄧㄢˋ"},
+  {word:"風景",bopomofo:"ㄈㄥ ㄐㄧㄥˇ"},
+  {word:"天空",bopomofo:"ㄊㄧㄢ ㄎㄨㄥ"},
+  {word:"白雲",bopomofo:"ㄅㄞˊ ㄩㄣˊ"},
+  {word:"太陽",bopomofo:"ㄊㄞˋ ㄧㄤˊ"},
+  {word:"月亮",bopomofo:"ㄩㄝˋ ㄌㄧㄤˋ"},
+  {word:"星星",bopomofo:"ㄒㄧㄥ ㄒㄧㄥ"},
+  {word:"下雨",bopomofo:"ㄒㄧㄚˋ ㄩˇ"},
+  {word:"刮風",bopomofo:"ㄍㄨㄚ ㄈㄥ"},
+  {word:"天氣",bopomofo:"ㄊㄧㄢ ㄑㄧˋ"},
+  {word:"紅色",bopomofo:"ㄏㄨㄥˊ ㄙㄜˋ"},
+  {word:"藍色",bopomofo:"ㄌㄢˊ ㄙㄜˋ"},
+  {word:"黃色",bopomofo:"ㄏㄨㄤˊ ㄙㄜˋ"},
+  {word:"綠色",bopomofo:"ㄌㄩˋ ㄙㄜˋ"},
+  {word:"白色",bopomofo:"ㄅㄞˊ ㄙㄜˋ"},
+  {word:"黑色",bopomofo:"ㄏㄟ ㄙㄜˋ"},
+  {word:"衣服",bopomofo:"ㄧ ㄈㄨˊ"},
+  {word:"鞋子",bopomofo:"ㄒㄧㄝˊ ㄗ˙"},
+  {word:"帽子",bopomofo:"ㄇㄠˋ ㄗ˙"},
+  {word:"雨傘",bopomofo:"ㄩˇ ㄙㄢˇ"},
+  {word:"眼鏡",bopomofo:"ㄧㄢˇ ㄐㄧㄥˋ"},
+  {word:"書包",bopomofo:"ㄕㄨ ㄅㄠ"},
+  {word:"桌子",bopomofo:"ㄓㄨㄛ ㄗ˙"},
+  {word:"椅子",bopomofo:"ㄧˇ ㄗ˙"},
+  {word:"房間",bopomofo:"ㄈㄤˊ ㄐㄧㄢ"},
+  {word:"客廳",bopomofo:"ㄎㄜˋ ㄊㄧㄥ"},
+  {word:"廚房",bopomofo:"ㄔㄨˊ ㄈㄤˊ"},
+  {word:"冰箱",bopomofo:"ㄅㄧㄥ ㄒㄧㄤ"},
+  {word:"電視",bopomofo:"ㄉㄧㄢˋ ㄕˋ"},
+  {word:"電話",bopomofo:"ㄉㄧㄢˋ ㄏㄨㄚˋ"},
+  {word:"手機",bopomofo:"ㄕㄡˇ ㄐㄧ"},
+  {word:"音樂",bopomofo:"ㄧㄣ ㄩㄝˋ"},
+  {word:"故事",bopomofo:"ㄍㄨˋ ㄕˋ"},
+  {word:"新聞",bopomofo:"ㄒㄧㄣ ㄨㄣˊ"},
+  {word:"開心",bopomofo:"ㄎㄞ ㄒㄧㄣ"},
+  {word:"幸福",bopomofo:"ㄒㄧㄥˋ ㄈㄨˊ"},
+  {word:"健康",bopomofo:"ㄐㄧㄢˋ ㄎㄤ"},
+  {word:"平安",bopomofo:"ㄆㄧㄥˊ ㄢ"},
+  {word:"快樂",bopomofo:"ㄎㄨㄞˋ ㄌㄜˋ"},
+  {word:"可愛",bopomofo:"ㄎㄜˇ ㄞˋ"},
+  {word:"溫暖",bopomofo:"ㄨㄣ ㄋㄨㄢˇ"},
+  {word:"漂亮",bopomofo:"ㄆㄧㄠˋ ㄌㄧㄤˋ"},
+  {word:"謝謝",bopomofo:"ㄒㄧㄝˋ ㄒㄧㄝˋ"},
+  {word:"早安",bopomofo:"ㄗㄠˇ ㄢ"},
+  {word:"晚安",bopomofo:"ㄨㄢˇ ㄢ"},
+  {word:"加油",bopomofo:"ㄐㄧㄚ ㄧㄡˊ"},
+  {word:"練習",bopomofo:"ㄌㄧㄢˋ ㄒㄧˊ"},
+  {word:"成功",bopomofo:"ㄔㄥˊ ㄍㄨㄥ"},
+  {word:"進步",bopomofo:"ㄐㄧㄣˋ ㄅㄨˋ"},
+  {word:"開始",bopomofo:"ㄎㄞ ㄕˇ"}
+];
+
+const timerEl = document.getElementById("timer");
+const charCountEl = document.getElementById("charCount");
+const wordCountEl = document.getElementById("wordCount");
+const wordEl = document.getElementById("word");
+const bopomofoEl = document.getElementById("bopomofo");
+const typingInput = document.getElementById("typingInput");
+const startBtn = document.getElementById("startBtn");
+const soundBtn = document.getElementById("soundBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+let currentWord = null;
+let time = 60;
+let charCount = 0;
+let wordCount = 0;
+let timerInterval = null;
+let playing = false;
+
+function pickWord(){
+  currentWord = words[Math.floor(Math.random() * words.length)];
+  wordEl.textContent = currentWord.word;
+  bopomofoEl.textContent = currentWord.bopomofo;
+  typingInput.value = "";
+  typingInput.focus();
+}
+
+function speakWord(){
+  if(!currentWord) return;
+
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(currentWord.word);
+  speech.lang = "zh-TW";
+  speech.rate = 0.8;
+  speech.pitch = 1;
+
+  window.speechSynthesis.speak(speech);
+}
+
+function getRank(count){
+  if(count >= 90) return 98;
+  if(count >= 75) return 92;
+  if(count >= 60) return 86;
+  if(count >= 45) return 78;
+  if(count >= 30) return 68;
+  if(count >= 20) return 58;
+  if(count >= 10) return 48;
+  return 35;
+}
+
+function getPraise(count){
+  if(count >= 90) return "太厲害了！您的打字速度很有感覺！";
+  if(count >= 75) return "非常棒！鍵盤越來越熟悉了！";
+  if(count >= 60) return "很不錯喔！已經進入穩定練習狀態！";
+  if(count >= 45) return "有進步！每天一分鐘會越來越順手！";
+  if(count >= 30) return "很好，願意開始就是很棒的練習！";
+  return "慢慢來沒關係，今天已經成功開始了！";
+}
+
+function finishGame(){
+  playing = false;
+  clearInterval(timerInterval);
+  typingInput.disabled = true;
+
+  const rank = getRank(charCount);
+  const praise = getPraise(charCount);
+
+  alert(
+    "🎉 恭喜完成一分鐘練習！\n\n" +
+    "本次打對：" + charCount + " 個字\n" +
+    "完成題數：" + wordCount + " 題\n" +
+    "贏過 " + rank + "% 的練習者！\n\n" +
+    praise + "\n\n" +
+    "💚 我們不用很厲害才開始，\n" +
+    "只要開始就很厲害！"
+  );
+}
+
+function startGame(){
+  time = 60;
+  charCount = 0;
+  wordCount = 0;
+  playing = true;
+
+  timerEl.textContent = time;
+  charCountEl.textContent = charCount;
+  wordCountEl.textContent = wordCount;
+
+  typingInput.disabled = false;
+  pickWord();
+  speakWord();
+
+  clearInterval(timerInterval);
+
+  timerInterval = setInterval(function(){
+    time--;
+    timerEl.textContent = time;
+
+    if(time <= 0){
+      finishGame();
+    }
+  }, 1000);
+}
+
+function resetGame(){
+  playing = false;
+  clearInterval(timerInterval);
+  window.speechSynthesis.cancel();
+
+  time = 60;
+  charCount = 0;
+  wordCount = 0;
+
+  timerEl.textContent = 60;
+  charCountEl.textContent = 0;
+  wordCountEl.textContent = 0;
+
+  wordEl.textContent = "準備開始";
+  bopomofoEl.textContent = "按下開始練習";
+
+  typingInput.value = "";
+  typingInput.disabled = true;
+}
+
+typingInput.addEventListener("input", function(){
+
+  if(!playing || !currentWord) return;
+
+  const typedText = typingInput.value.trim();
+
+  if(typedText === currentWord.word){
+
+    charCount += currentWord.word.length;
+    wordCount++;
+
+    charCountEl.textContent = charCount;
+    wordCountEl.textContent = wordCount;
+
+    // 先清空
+    typingInput.value = "";
+
+    // 延遲一點再換題
+    setTimeout(()=>{
+
+      pickWord();
+      speakWord();
+
+    },100);
+
+  }
+
+});
+
+startBtn.addEventListener("click", startGame);
+resetBtn.addEventListener("click", resetGame);
+soundBtn.addEventListener("click", speakWord);
+</script>
+
+</body>
+</html>

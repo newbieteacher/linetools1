@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>滑鼠練習｜簡老師電腦基礎練習站</title>
+
+<style>
+    .home-link{
+  color:white;
+  text-decoration:none;
+}
+
+.home-link:hover{
+  opacity:0.9;
+}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:"Microsoft JhengHei",sans-serif;
+  background:#f4f7fb;
+  color:#222;
+}
+
+/* 公版抬頭 */
+header{
+  background:#1e293b;
+  color:white;
+  padding:30px;
+  position:relative;
+}
+
+.header-left h1{
+  margin:0;
+  font-size:48px;
+  font-weight:bold;
+}
+
+.header-left p{
+  margin:8px 0 0 0;
+  font-size:28px;
+  color:#cbd5e1;
+}
+
+.version{
+  position:absolute;
+  top:20px;
+  right:30px;
+  background:#ff6b35;
+  color:white;
+  padding:12px 24px;
+  border-radius:12px;
+  font-size:24px;
+  font-weight:bold;
+}
+
+.teacher-info{
+  margin-top:18px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:16px;
+  padding:16px;
+  font-size:20px;
+  line-height:1.8;
+  color:#e2e8f0;
+  max-width:700px;
+}
+
+.teacher-info a{
+  color:#e2e8f0;
+}
+
+.page-title{
+  text-align:center;
+  font-size:38px;
+  font-weight:bold;
+  padding:28px 10px 10px;
+  color:#1e293b;
+}
+
+.page-subtitle{
+  text-align:center;
+  font-size:24px;
+  color:#555;
+  margin-bottom:20px;
+}
+
+.info{
+  display:flex;
+  justify-content:center;
+  gap:24px;
+  flex-wrap:wrap;
+  padding:10px 20px 20px;
+}
+
+.card{
+  background:white;
+  padding:20px 40px;
+  border-radius:24px;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.label{
+  font-size:24px;
+  color:#666;
+}
+
+.value{
+  font-size:48px;
+  color:#06C755;
+  font-weight:bold;
+}
+
+.btn-area{
+  text-align:center;
+  margin:20px;
+}
+
+.startBtn{
+  background:#06C755;
+  color:white;
+  border:none;
+  padding:22px 60px;
+  border-radius:999px;
+  font-size:32px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,0.2);
+}
+
+#gameArea{
+  position:relative;
+  width:90%;
+  max-width:1100px;
+  height:420px;
+  margin:20px auto;
+  background:white;
+  border:4px dashed #cbd5e1;
+  border-radius:28px;
+  overflow:hidden;
+}
+
+.balloon{
+  position:absolute;
+  font-size:70px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.footer{
+  text-align:center;
+  font-size:26px;
+  color:#666;
+  line-height:1.8;
+  padding:30px 20px 80px;
+}
+
+.float-line{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:9999;
+  background:#06C755;
+  color:white;
+  padding:14px 18px;
+  border-radius:999px;
+  font-size:18px;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+
+@media(max-width:768px){
+  header{
+    padding:20px;
+    text-align:center;
+  }
+
+  .header-left h1{
+    font-size:34px;
+  }
+
+  .header-left p{
+    font-size:22px;
+  }
+
+  .version{
+    position:static;
+    display:inline-block;
+    margin-top:14px;
+    font-size:18px;
+  }
+
+  .teacher-info{
+    font-size:17px;
+  }
+
+  .page-title{
+    font-size:30px;
+  }
+
+  .page-subtitle{
+    font-size:20px;
+  }
+
+  .value{
+    font-size:38px;
+  }
+
+  .startBtn{
+    width:90%;
+    font-size:26px;
+    padding:18px;
+  }
+
+  #gameArea{
+    height:360px;
+  }
+
+  .balloon{
+    font-size:56px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-left">
+
+    <h1>
+  <a href="index.html" class="home-link">
+    簡老師電腦班
+  </a>
+</h1>
+
+    <p>電腦基礎練習站</p>
+
+    <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal;">
+      滑鼠、打字、電腦操作，初學也能慢慢學
+    </p>
+
+    <div class="teacher-info">
+      <div>📱 LINE ID：@301FTLVT（記得加 @）</div>
+
+      <div>
+        ☎️ 手機：
+        <a href="tel:0918256089">0918-256-089</a>
+      </div>
+
+      <div>🏠 地址：新北市板橋區明德街8號2樓</div>
+
+      <div style="margin-top:10px;">
+        <a href="https://lin.ee/wXZLYUdp" target="_blank">
+          <img src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
+               alt="加入好友" height="44">
+        </a>
+      </div>
+
+      <div style="font-size:16px;margin-top:6px;color:#cbd5e1;">
+        💬 加入後請丟個貼圖或打「+1」喔 😊
+      </div>
+    </div>
+
+  </div>
+
+  <div class="version">
+    V2.0 初學友善版
+  </div>
+</header>
+
+<div class="page-title">
+  🖱️ 滑鼠練習｜點氣球練習
+</div>
+
+<div class="page-subtitle">
+  🎈 看到氣球快按二下，其他圖案按一下，練習滑鼠反應力
+</div>
+
+<div class="info">
+  <div class="card">
+    <div class="label">剩餘時間</div>
+    <div class="value" id="timer">60</div>
+  </div>
+
+  <div class="card">
+    <div class="label">目前得分</div>
+    <div class="value" id="score">0</div>
+  </div>
+</div>
+
+<div class="btn-area">
+  <button class="startBtn" id="startBtn">
+    開始練習
+  </button>
+</div>
+
+<div id="gameArea"></div>
+
+<div class="footer">
+  💚 慢慢練習也沒關係<br>
+  💚 只要開始就很厲害
+</div>
+
+<a href="https://lin.ee/wXZLYUdp" target="_blank" class="float-line">
+  💬 LINE
+</a>
+
+<script>
+const gameArea = document.getElementById("gameArea");
+const scoreEl = document.getElementById("score");
+const timerEl = document.getElementById("timer");
+const startBtn = document.getElementById("startBtn");
+
+let score = 0;
+let time = 60;
+let timerInterval = null;
+let balloonInterval = null;
+
+function createBalloon(){
+  const item = document.createElement("div");
+  item.className = "balloon";
+
+  const icons = ["🎈","🎉","⭐","🟢","💚"];
+  const icon = icons[Math.floor(Math.random() * icons.length)];
+
+  item.textContent = icon;
+
+  const areaWidth = gameArea.clientWidth;
+  const areaHeight = gameArea.clientHeight;
+
+  item.style.left = Math.random() * (areaWidth - 80) + "px";
+  item.style.top = Math.random() * (areaHeight - 80) + "px";
+
+  // 🎈 氣球要雙擊
+  if(icon === "🎈"){
+    item.title = "氣球要快按二下";
+
+    item.addEventListener("dblclick", function(){
+      score += 3;
+      scoreEl.textContent = score;
+      item.remove();
+    });
+
+    item.addEventListener("click", function(){
+      item.style.transform = "scale(1.15)";
+      setTimeout(()=>{
+        item.style.transform = "scale(1)";
+      },150);
+    });
+  }
+  // 其他圖按一下
+  else{
+    item.addEventListener("click", function(){
+      score += 1;
+      scoreEl.textContent = score;
+      item.remove();
+    });
+  }
+
+  gameArea.appendChild(item);
+
+  setTimeout(function(){
+    if(item.parentNode){
+      item.remove();
+    }
+  }, 2000);
+}
+
+function getRank(score){
+  if(score >= 80) return 98;
+  if(score >= 60) return 90;
+  if(score >= 45) return 80;
+  if(score >= 30) return 70;
+  if(score >= 20) return 60;
+  if(score >= 10) return 50;
+  return 35;
+}
+
+function getPraise(score){
+  if(score >= 80) return "太厲害了！您的手眼協調超強！";
+  if(score >= 60) return "非常棒！已經很熟悉滑鼠操作了！";
+  if(score >= 45) return "很不錯喔！越來越穩了！";
+  if(score >= 30) return "有進步！繼續練會更順手！";
+  if(score >= 20) return "很好，願意開始就是最棒的！";
+  return "慢慢來沒關係，今天已經成功開始了！";
+}
+
+function startGame(){
+  score = 0;
+  time = 60;
+
+  scoreEl.textContent = score;
+  timerEl.textContent = time;
+  gameArea.innerHTML = "";
+
+  clearInterval(timerInterval);
+  clearInterval(balloonInterval);
+
+  createBalloon();
+
+  balloonInterval = setInterval(createBalloon, 800);
+
+  timerInterval = setInterval(function(){
+    time--;
+    timerEl.textContent = time;
+
+    if(time <= 0){
+      clearInterval(timerInterval);
+      clearInterval(balloonInterval);
+      gameArea.innerHTML = "";
+
+      const rank = getRank(score);
+      const praise = getPraise(score);
+
+      alert(
+        "🎉 恭喜完成練習！\n\n" +
+        "本次得分：" + score + " 分\n" +
+        "贏過 " + rank + "% 的練習者！\n\n" +
+        praise + "\n\n" +
+        "💚 我們不用很厲害才開始，\n" +
+        "只要開始就很厲害！"
+      );
+    }
+  }, 1000);
+}
+
+startBtn.addEventListener("click", startGame);
+</script>
+
+</body>
+</html>
