@@ -1,1 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>簡老師電腦基礎練習站</title>
+
+<style>
+    .home-link{
+  color:white;
+  text-decoration:none;
+}
+
+.home-link:hover{
+  opacity:0.9;
+}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:"Microsoft JhengHei",sans-serif;
+  background:#f4f7fb;
+  color:#222;
+}
+
+/* ===== 公版抬頭 ===== */
+
+header{
+  background:#1e293b;
+  color:white;
+  padding:30px;
+  position:relative;
+}
+
+.header-left h1{
+  margin:0;
+  font-size:48px;
+  font-weight:bold;
+}
+
+.header-left p{
+  margin:8px 0 0 0;
+  font-size:28px;
+  color:#cbd5e1;
+}
+
+.version{
+  position:absolute;
+  top:20px;
+  right:30px;
+  background:#ff6b35;
+  color:white;
+  padding:12px 24px;
+  border-radius:12px;
+  font-size:24px;
+  font-weight:bold;
+}
+
+.teacher-info{
+  margin-top:18px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:16px;
+  padding:16px;
+  font-size:20px;
+  line-height:1.8;
+  color:#e2e8f0;
+  max-width:700px;
+}
+
+.teacher-info a{
+  color:#e2e8f0;
+}
+
+/* ===== 主視覺 ===== */
+
+.hero{
+  max-width:1100px;
+  margin:auto;
+  padding:50px 20px 30px;
+  text-align:center;
+}
+
+.hero h2{
+  font-size:56px;
+  color:#1e293b;
+  margin-bottom:24px;
+  line-height:1.5;
+}
+
+.hero p{
+  font-size:30px;
+  color:#555;
+  line-height:1.8;
+}
+
+.slogan{
+  margin-top:35px;
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+
+.slogan-small{
+  font-size:32px;
+  color:#444;
+  margin-bottom:10px;
+}
+
+.slogan-big{
+  font-size:54px;
+  color:#06C755;
+  font-weight:bold;
+}
+
+/* ===== 功能卡片 ===== */
+
+.card-wrap{
+  max-width:1200px;
+  margin:30px auto 60px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:28px;
+  padding:0 20px;
+}
+
+.card{
+  background:white;
+  border-radius:30px;
+  padding:36px 28px;
+  text-align:center;
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+.icon{
+  font-size:90px;
+  margin-bottom:20px;
+}
+
+.card h3{
+  font-size:40px;
+  margin-bottom:18px;
+  color:#1e293b;
+}
+
+.card p{
+  font-size:26px;
+  line-height:1.8;
+  color:#666;
+  min-height:130px;
+}
+
+.card button{
+  width:100%;
+  margin-top:24px;
+  padding:22px;
+  border:none;
+  border-radius:22px;
+  background:#06C755;
+  color:white;
+  font-size:30px;
+  font-weight:bold;
+  cursor:pointer;
+  font-family:"Microsoft JhengHei",sans-serif;
+}
+
+/* ===== 底部 ===== */
+
+.footer{
+  text-align:center;
+  font-size:28px;
+  color:#666;
+  line-height:2;
+  padding:20px 20px 90px;
+}
+
+.float-line{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:9999;
+  background:#06C755;
+  color:white;
+  padding:14px 18px;
+  border-radius:999px;
+  font-size:18px;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+
+/* ===== 手機版 ===== */
+
+@media(max-width:768px){
+
+  header{
+    padding:20px;
+    text-align:center;
+  }
+
+  .header-left h1{
+    font-size:34px;
+  }
+
+  .header-left p{
+    font-size:22px;
+  }
+
+  .version{
+    position:static;
+    display:inline-block;
+    margin-top:14px;
+    font-size:18px;
+  }
+
+  .teacher-info{
+    font-size:17px;
+  }
+
+  .hero h2{
+    font-size:38px;
+  }
+
+  .hero p{
+    font-size:24px;
+  }
+
+  .slogan-small{
+    font-size:24px;
+  }
+
+  .slogan-big{
+    font-size:38px;
+  }
+
+  .icon{
+    font-size:70px;
+  }
+
+  .card h3{
+    font-size:32px;
+  }
+
+  .card p{
+    font-size:22px;
+    min-height:auto;
+  }
+
+  .card button{
+    font-size:24px;
+  }
+
+  .footer{
+    font-size:24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="header-left">
+
+   <h1>
+  <a href="index.html" class="home-link">
+    簡老師電腦班
+  </a>
+</h1>
+
+    <p>電腦基礎練習站</p>
+
+    <p style="margin:6px 0 0 0;font-size:22px;color:#cbd5e1;font-weight:normal;">
+      滑鼠、打字、電腦操作，第一次學也沒關係
+    </p>
+
+    <div class="teacher-info">
+
+      <div>
+        📱 LINE ID：@301FTLVT（記得加 @）
+      </div>
+
+      <div>
+        ☎️ 手機：
+        <a href="tel:0918256089">
+          0918-256-089
+        </a>
+      </div>
+
+      <div>
+        🏠 地址：新北市板橋區明德街8號2樓
+      </div>
+
+      <div style="margin-top:10px;">
+        <a href="https://lin.ee/wXZLYUdp" target="_blank">
+
+          <img
+          src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
+          alt="加入好友"
+          height="44">
+
+        </a>
+      </div>
+
+      <div style="font-size:16px;margin-top:6px;color:#cbd5e1;">
+        💬 加入後請丟個貼圖或打「+1」喔 😊
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="version">
+    V1.0 初學友善版
+  </div>
+
+</header>
+
+<section class="hero">
+
+  <h2>
+    滑鼠、打字、電腦操作<br>
+    慢慢學也沒關係
+  </h2>
+
+  <p>
+    手機、電腦都能使用<br>
+    適合第一次接觸電腦的初學者
+  </p>
+
+  <div class="slogan">
+
+    <div class="slogan-small">
+      我們不用很厲害才開始
+    </div>
+
+    <div class="slogan-big">
+      只要開始就很厲害 💚
+    </div>
+
+  </div>
+
+</section>
+
+<section class="card-wrap">
+
+  <div class="card">
+
+    <div class="icon">🖱️</div>
+
+    <h3>滑鼠練習</h3>
+
+    <p>
+      點氣球練習滑鼠操作<br>
+      練習單擊與雙擊反應
+    </p>
+
+    <button onclick="window.location.href='mouse-game.html'">
+      開始練習
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <div class="icon">⌨️</div>
+
+    <h3>中文打字練習</h3>
+
+    <p>
+      生活中文名詞練習<br>
+      注音＋語音輔助學習
+    </p>
+
+    <button onclick="window.location.href='typing-test.html'">
+      開始練習
+    </button>
+
+  </div>
+  <div class="card">
+
+  <div class="icon">🎮</div>
+
+  <h3>指法練習網站</h3>
+
+  <p>
+    進入外部打字遊戲網站<br>
+    練習鍵盤位置與指法
+  </p>
+
+  <button onclick="window.open('https://book.eduweb.com.tw/TGame/','_blank')">
+    開始練習
+  </button>
+
+</div>
+
+</section>
+
+<div class="footer">
+  💚 今天比昨天更熟悉了<br>
+  💚 每天練習一下下就很好
+</div>
+
+<a href="https://lin.ee/wXZLYUdp"
+target="_blank"
+class="float-line">
+
+💬 LINE
+
+</a>
+
+</body>
+</html>
