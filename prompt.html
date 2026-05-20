@@ -186,7 +186,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
   </div>
-  <div class="version">V1.6 簡老師教學版</div>
+  <div class="version">V1.7 簡老師教學版</div>
 </header>
 
 <div class="box">
@@ -280,12 +280,10 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
     <div class="control-group">
   <label>⑧ 背景處理方式</label>
   <select id="backgroundType">
-    <option>公版淺灰背景（推薦）</option>
-    <option>純白背景（推薦）</option>
-    <option>方便去背背景</option>
+   
     <option>透明背景風格</option>
-    <option>柔色背景</option>
-    <option>場景背景</option>
+    
+   
   </select>
 </div>
 
@@ -549,6 +547,11 @@ ${theme}
 ${fontStyle}
 
 背景處理方式：
+背景完全透明 PNG
+不要白底、不要灰底、不要陰影底板
+每格獨立貼圖四周保留留白
+不要超出邊界
+適合後續裁切成 LINE 貼圖
 ${backgroundType}
 
 貼圖數量：
@@ -595,6 +598,10 @@ function generateMotionPrompt(){
 請生成「3×2 動畫分鏡總表」，
 共6格連續動作，
 依照「${motion}」動作進行拆解。
+可去背透明背景
+不要格線
+不要編號
+每格保留透明間距
 
 每格保持角色一致性，
 維持相同服裝、配色與風格。
