@@ -186,7 +186,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
   </div>
-  <div class="version">V1.7 簡老師教學版</div>
+  <div class="version">V1.8 簡老師教學版</div>
 </header>
 
 <div class="box">
@@ -218,6 +218,8 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
     <div class="control-group">
       <label>🎨 貼圖風格</label>
       <select id="style">
+        <option>水汪汪大眼風</option>
+        <option>眼淚製造機表情風</option>
         <option>經典LINE貼圖風</option>
         <option>大頭Q版風</option>
         <option>日系可愛</option>
@@ -263,6 +265,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
     <div class="control-group">
       <label>🔤 文字樣式</label>
       <select id="fontStyle">
+      
         <option>粗體清楚＋白外框</option>
         <option>圓體可愛＋白外框</option>
         <option>暖色療癒字</option>
@@ -508,6 +511,38 @@ function generateStaticPrompt(){
   const mode = document.getElementById("generateMode").value;
   const characterType = document.getElementById("characterType").value;
   const style = document.getElementById("style").value;
+  let extraStylePrompt="";
+
+if(style==="水汪汪大眼風"){
+
+extraStylePrompt=`
+
+角色使用超大圓潤眼睛，
+眼睛佔臉部比例較大，
+眼神水汪汪，
+帶有反光效果，
+整體可愛療癒，
+表情誇張明顯。
+
+`;
+
+}
+
+if(style==="眼淚製造機表情風"){
+
+extraStylePrompt=`
+
+角色使用超大水汪汪眼睛，
+眼睛充滿淚光效果，
+誇張眼淚流動感，
+表情情緒強烈，
+適合哭爆、委屈、崩潰、感動等情緒，
+整體迷因貼圖風格，
+可愛又有戲劇張力。
+
+`;
+
+}
   const theme = document.getElementById("theme").value;
   const fontStyle = document.getElementById("fontStyle").value;
   const backgroundType = document.getElementById("backgroundType").value;
@@ -544,6 +579,8 @@ ${characterText}
 
 風格：
 ${style}
+
+${extraStylePrompt}
 
 主題：
 ${theme}
