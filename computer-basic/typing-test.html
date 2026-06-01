@@ -598,32 +598,7 @@ typingInput.addEventListener("keydown", function(e){
 
 });
 
-  if(!playing || !currentWord) return;
 
-  const typedText = typingInput.value.trim();
-
-  if(typedText === currentWord.word){
-
-    charCount += currentWord.word.length;
-    wordCount++;
-
-    charCountEl.textContent = charCount;
-    wordCountEl.textContent = wordCount;
-
-    // 先清空
-    typingInput.value = "";
-
-    // 延遲一點再換題
-    setTimeout(()=>{
-
-      pickWord();
-      speakWord();
-
-    },100);
-
-  }
-
-});
 
 startBtn.addEventListener("click", startGame);
 resetBtn.addEventListener("click", resetGame);
