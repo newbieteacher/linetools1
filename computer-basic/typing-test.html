@@ -456,11 +456,21 @@ let timerInterval = null;
 let playing = false;
 
 function pickWord(){
+
   currentWord = words[Math.floor(Math.random() * words.length)];
+
   wordEl.textContent = currentWord.word;
   bopomofoEl.textContent = currentWord.bopomofo;
-  typingInput.value = "";
-  typingInput.focus();
+
+  typingInput.blur();
+
+  setTimeout(()=>{
+
+      typingInput.value = "";
+      typingInput.focus();
+
+  },50);
+
 }
 
 function speakWord(){
@@ -561,7 +571,32 @@ function resetGame(){
   typingInput.disabled = true;
 }
 
-typingInput.addEventListener("input", function(){
+typingInput.addEventListener("keydown", function(e){
+
+  if(!playing || !currentWord) return;
+
+  if(e.key !== "Enter") return;
+
+  const typedText = typingInput.value.trim();
+
+  if(typedText === currentWord.word){
+
+    charCount += currentWord.word.length;
+    wordCount++;
+
+    charCountEl.textContent = charCount;
+    wordCountEl.textContent = wordCount;
+
+    pickWord();
+    speakWord();
+
+  }else{
+
+    alert("再試一次喔 😊");
+
+  }
+
+});
 
   if(!playing || !currentWord) return;
 
