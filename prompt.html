@@ -317,6 +317,29 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 </div>
 
 <div class="controls-section">
+  <div class="controls-section">
+  <h2>✍️ 隨你填貼圖咒語生成</h2>
+
+  <div class="controls">
+
+    <div class="control-group">
+      <label>文字保留區域</label>
+      <select id="customTextArea">
+        <option>上方留白</option>
+        <option>下方留白</option>
+        <option>左側留白</option>
+        <option>右側留白</option>
+      </select>
+    </div>
+
+  </div>
+
+  <button class="btn-primary"
+    onclick="generateCustomStickerPrompt()"
+    style="width:100%;margin-top:20px;">
+    ✨ 生成隨你填貼圖咒語
+  </button>
+</div>
   <h2>🎬 動態貼圖咒語生成</h2>
 
   <div class="controls">
@@ -626,6 +649,45 @@ ${stickerCount} 張
 請完整輸出 ${stickerCount} 張貼圖，
 不要少圖，
 不要重複同一張。
+`;
+
+  document.getElementById("output").value = prompt;
+}
+function generateCustomStickerPrompt(){
+
+  const area =
+  document.getElementById("customTextArea").value;
+
+  const prompt = `
+請生成 LINE隨你填貼圖(Custom Sticker)。
+
+生成方式：
+依上傳圖片生成
+
+請保持人物造型一致，
+適合LINE貼圖使用。
+
+圖片中不要出現任何文字。
+
+需預留使用者輸入文字區域：
+
+${area}
+
+保留足夠空白區域，
+不要被角色遮擋。
+
+角色置中，
+表情明顯，
+四周保留適當留白。
+
+背景使用公版淺灰背景，
+方便後續去背。
+
+適合後續裁切成LINE貼圖。
+
+請生成16張貼圖，
+每張動作與表情不同，
+不要重複。
 `;
 
   document.getElementById("output").value = prompt;
