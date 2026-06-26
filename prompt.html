@@ -248,6 +248,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
     <div class="control-group">
       <label>💬 常用主題</label>
       <select id="theme">
+        <option>台灣口頭禪文字風</option>
         <option>日常問候</option>
         <option>情緒反應</option>
         <option>股民常用語</option>
@@ -289,8 +290,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
    <option>公版淺灰背景（推薦）</option>
     <option>純白背景（推薦）</option>
     <option>方便去背背景</option>
-    <option>透明背景風格</option>
-    <option>柔色背景</option>
+        <option>柔色背景</option>
     <option>場景背景</option>
     
    
@@ -755,7 +755,7 @@ document.getElementById("canvaMotion").selectedIndex
   const prompt = `
 LINE animated sticker style, square composition, medium close-up, large character, occupy 70% of the frame, character centered, single character, minimal movement, transparent background style, character fixed in the center, no camera movement, do not crop the head or hands, keep safe margins around all content, no elements near the edges, simple looping motion, ${motion}, cute chibi sticker style, clean outline, stable character consistency, keep the text unchanged, keep the character design unchanged, leave at least 10px safe margin around all content.
 
-LINE動態貼圖風格、方形構圖、中近景、大角色、角色佔畫面70%、角色置中、單一角色、小幅度動作、透明背景風格、角色固定在畫面中央、不要鏡頭移動、不要切到頭和手、所有內容保留安全邊界、不要貼近畫面邊緣、簡單循環動作、${motionZh}、可愛Q版貼圖風格、乾淨描邊、角色一致性穩定、文字保持不變、人物造型保持不變、所有內容四周至少保留10px安全邊界。
+LINE動態貼圖風格、方形構圖、中近景、大角色、角色佔畫面70%、角色置中、單一角色、小幅度動作、角色固定在畫面中央、不要鏡頭移動、不要切到頭和手、所有內容保留安全邊界、不要貼近畫面邊緣、簡單循環動作、${motionZh}、可愛Q版貼圖風格、乾淨描邊、角色一致性穩定、文字保持不變、人物造型保持不變、所有內容四周至少保留10px安全邊界。
 `;
 
   document.getElementById("output").value = prompt;
