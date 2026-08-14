@@ -3,6 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      var userAgent = navigator.userAgent || "";
+      var isAndroidLine = /Android/i.test(userAgent) && /\bLine\//i.test(userAgent);
+
+      if (!isAndroidLine || location.protocol === "file:") return;
+
+      var webUrl = location.href;
+      var chromeIntent = "intent://" + location.host + location.pathname + location.search +
+        "#Intent;scheme=" + location.protocol.replace(":", "") +
+        ";package=com.android.chrome" +
+        ";S.browser_fallback_url=" + encodeURIComponent(webUrl) +
+        ";end";
+
+      window.openInChrome = function () {
+        location.href = chromeIntent;
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var notice = document.createElement("div");
+        notice.setAttribute("style", "position:fixed;left:12px;right:12px;bottom:12px;z-index:10000;padding:16px;background:#fff;border:2px solid #06c755;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.25);text-align:center;font-family:sans-serif;");
+        notice.innerHTML = '<div style="margin-bottom:10px;font-weight:bold;color:#222;">請使用 Google Chrome 開啟貼圖小工具</div>' +
+          '<button type="button" onclick="openInChrome()" style="width:100%;padding:12px;border:0;border-radius:10px;background:#06c755;color:#fff;font-size:18px;font-weight:bold;">使用 Google Chrome 開啟</button>';
+        notice.innerHTML = '<div style="margin-bottom:10px;font-weight:bold;color:#222;">&#35531;&#20351;&#29992; Google Chrome &#38283;&#21855;&#36028;&#22294;&#23567;&#24037;&#20855;</div>' +
+          '<button type="button" onclick="openInChrome()" style="width:100%;padding:12px;border:0;border-radius:10px;background:#06c755;color:#fff;font-size:18px;font-weight:bold;">&#20351;&#29992; Google Chrome &#38283;&#21855;</button>';
+        document.body.appendChild(notice);
+      });
+
+      setTimeout(function () {
+        location.replace(chromeIntent); // Open Chrome automatically when LINE permits it.
+      }, 150);
+
+      // Android 有時會阻擋沒有手勢觸發的外部 App；按鈕可作為備援。
+      setTimeout(function () {
+    })();
+  </script>
   <title>簡老師LINE貼圖工具箱</title>
   <div style="
 background:#fff7ed;
