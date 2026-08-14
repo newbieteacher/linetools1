@@ -6,7 +6,9 @@
   <script>
     (function () {
       var userAgent = navigator.userAgent || "";
-      var isAndroidLine = /Android/i.test(userAgent) && /\bLine\//i.test(userAgent);
+      var isAndroid = /Android/i.test(userAgent);
+      var isLineOrWebView = /Line\/|IABMV|;\s*wv\)|\bwv\b|Version\/4\.0/i.test(userAgent);
+      var isAndroidLine = isAndroid && isLineOrWebView;
 
       if (!isAndroidLine || location.protocol === "file:") return;
 
@@ -250,7 +252,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
   </div>
-  <div class="version">V4.6 簡老師教學版</div>
+  <div class="version">V4.7 簡老師教學版</div>
 </header>
 
 <div class="box">
