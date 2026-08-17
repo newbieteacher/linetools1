@@ -186,7 +186,7 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 
 </div>
   </div>
-  <div class="version">V1.8 簡老師教學版</div>
+  <div class="version">V1.9 簡老師教學版</div>
 </header>
 
 <div class="box">
@@ -317,29 +317,6 @@ font-size:20px;line-height:1.8;color:#e2e8f0;max-width:700px;">
 </div>
 
 <div class="controls-section">
-  <div class="controls-section">
-  <h2>✍️ 隨你填貼圖咒語生成</h2>
-
-  <div class="controls">
-
-    <div class="control-group">
-      <label>文字保留區域</label>
-      <select id="customTextArea">
-        <option>上方留白</option>
-        <option>下方留白</option>
-        <option>左側留白</option>
-        <option>右側留白</option>
-      </select>
-    </div>
-
-  </div>
-
-  <button class="btn-primary"
-    onclick="generateCustomStickerPrompt()"
-    style="width:100%;margin-top:20px;">
-    ✨ 生成隨你填貼圖咒語
-  </button>
-</div>
   <h2>🎬 動態貼圖咒語生成</h2>
 
   <div class="controls">
@@ -572,6 +549,38 @@ extraStylePrompt=`
   const fontStyle = document.getElementById("fontStyle").value;
   const backgroundType = document.getElementById("backgroundType").value;
 
+  // 將容易在去背時受損的文字樣式，轉成更明確的生成指令。
+  const fontStylePrompts = {
+    "粗體清楚＋白外框": `
+粗厚、實心、清楚易讀的字體。
+文字主體使用高對比色，先加深色描邊，再加完整、連續、不透明的純白色外框。
+白色外框厚度一致、邊緣清楚，不可有缺口、半透明、模糊或與背景融合。`,
+    "圓體可愛＋白外框": `
+圓潤可愛、粗厚、實心且清楚易讀的圓體字。
+文字主體先加深色描邊，再加完整、連續、不透明的純白色外框。
+白色外框厚度一致、邊緣清楚，不可有缺口、半透明、模糊或與背景融合。`,
+    "手寫風": `
+保留自然可愛的手寫感，但字形必須粗厚、實心、清楚易讀。
+禁止細筆畫、飛白、斷筆、筆刷缺口、鏤空、半透明效果及潦草難辨的字形。
+文字描邊必須完整連續，所有筆畫不得互相黏連或破損。`
+  };
+
+  const fontStylePrompt = fontStylePrompts[fontStyle] || `\n${fontStyle}`;
+
+  const backgroundPrompts = {
+    "方便去背背景": `
+使用與角色、文字及白色外框明顯不同的單一高飽和純色背景。
+背景顏色必須完全均勻，不可有漸層、陰影、光暈、紋理、雜訊或反光。
+背景色不得出現在角色、文字或外框內，也不得滲入白色外框。`,
+    "公版淺灰背景（推薦）": `
+使用乾淨、均勻的單一淺灰色背景，不可有漸層、陰影、光暈、紋理或雜訊。`,
+    "純白背景（推薦）": `
+使用乾淨、均勻的純白色背景，不可有漸層、陰影、光暈、紋理或雜訊。
+若文字使用白色外框，白框與背景之間必須有清楚的深色分隔描邊，避免外框消失。`
+  };
+
+  const backgroundPrompt = backgroundPrompts[backgroundType] || `\n${backgroundType}`;
+
   const countInfo = document.getElementById("stickerCount").value.split("|");
   const stickerCount = countInfo[0];
   const gridLayout = countInfo[1];
@@ -612,13 +621,15 @@ ${theme}
 
 文字風格：
 ${fontStyle}
+${fontStylePrompt}
 
 背景處理方式：
+${backgroundType}
+${backgroundPrompt}
 
 每格獨立貼圖四周保留留白
 不要超出邊界
 適合後續裁切成 LINE 貼圖
-${backgroundType}
 
 貼圖數量：
 ${stickerCount} 張
@@ -638,6 +649,8 @@ ${stickerCount} 張
 避免過細筆畫與淡色描邊，
 提升後續去背成功率，
 即使是手寫風也請保持字體清楚厚實。
+文字、描邊及白色外框四周必須保留充足安全距離，
+不可貼近格子邊界、不可超出畫面、不可被裁切。
 
 適合後續裁切成 LINE 靜態貼圖。
 
@@ -653,45 +666,6 @@ ${stickerCount} 張
 
   document.getElementById("output").value = prompt;
 }
-function generateCustomStickerPrompt(){
-
-  const area =
-  document.getElementById("customTextArea").value;
-
-  const prompt = `
-請生成 LINE隨你填貼圖(Custom Sticker)。
-
-生成方式：
-依上傳圖片生成
-
-請保持人物造型一致，
-適合LINE貼圖使用。
-
-圖片中不要出現任何文字。
-
-需預留使用者輸入文字區域：
-
-${area}
-
-保留足夠空白區域，
-不要被角色遮擋。
-
-角色置中，
-表情明顯，
-四周保留適當留白。
-
-背景使用公版淺灰背景，
-方便後續去背。
-
-適合後續裁切成LINE貼圖。
-
-請生成16張貼圖，
-每張動作與表情不同，
-不要重複。
-`;
-
-  document.getElementById("output").value = prompt;
-}
 function generateMotionPrompt(){
 
   const motion = document.getElementById("motion").value;
@@ -703,6 +677,7 @@ function generateMotionPrompt(){
 請生成「3×2 動畫分鏡總表」，
 共6格連續動作，
 依照「${motion}」動作進行拆解。
+六格必須使用完全相同大小的畫格與相同裁切範圍。
 背景請使用乾淨淺灰色背景，
 方便後續去背處理。
 不要格線
@@ -714,8 +689,17 @@ function generateMotionPrompt(){
 每格保持角色一致性，
 維持相同服裝、配色與風格。
 
+【重要：鎖定動畫定位】
+六格使用完全相同的固定鏡頭、視角、縮放比例與角色尺寸。
+以角色軀幹中心作為固定錨點，六格的軀幹中心必須落在每一格完全相同的座標。
+腳底基準線、頭頂高度及角色整體外框位置必須對齊，不可左右漂移、上下跳動、忽大忽小或旋轉畫面。
+禁止每格重新構圖、改變透視、改變鏡頭距離或移動整個角色。
+僅允許完成「${motion}」所必要的手、腳、五官或局部姿勢做小幅度逐格變化；未參與動作的身體部位保持固定。
+文字必須視為固定圖層，六格的文字內容、字形、大小、角度與座標完全一致，不得跟著肢體晃動。
+六格裁切後疊放時，角色主體和文字應能精準重合，只看見動作部位平順變化。
+
 每格只做小幅度變化，
-讓動畫自然流暢。
+相鄰兩格的動作差異必須均勻且微小，形成自然流暢的補間感，不可突然跳姿勢。
 
 第一格與最後一格動作接近，
 方便後續自然循環播放。
@@ -755,9 +739,9 @@ document.getElementById("canvaMotion").selectedIndex
 ].text;
 
   const prompt = `
-LINE animated sticker style, square composition, medium close-up, large character, occupy 70% of the frame, character centered, single character, minimal movement, transparent background style, character fixed in the center, no camera movement, do not crop the head or hands, keep safe margins around all content, no elements near the edges, simple looping motion, ${motion}, cute chibi sticker style, clean outline, stable character consistency, keep the text unchanged, keep the character design unchanged, leave at least 10px safe margin around all content.
+LINE animated sticker style, square composition, medium close-up, large character occupying exactly 70% of every frame, single character, minimal movement, simple seamless looping motion: ${motion}. Use a locked camera, identical framing, identical crop, identical scale and identical perspective in every frame. Fix the torso center to the exact same x/y coordinates in every frame. Align the feet baseline, top of head and character bounding box across all frames. No whole-character translation, no camera movement, no zoom, no rotation, no size fluctuation and no reframing. Only the body parts required for the selected motion may change slightly; all other parts must remain fixed. Adjacent frames must have small, evenly spaced changes. Treat all text as a fixed overlay: identical text, font, size, angle and x/y position in every frame. When the frames are stacked, the torso and text must overlap exactly. Do not crop the head or hands, keep safe margins around all content, cute chibi sticker style, clean outline, stable character consistency.
 
-LINE動態貼圖風格、方形構圖、中近景、大角色、角色佔畫面70%、角色置中、單一角色、小幅度動作、角色固定在畫面中央、不要鏡頭移動、不要切到頭和手、所有內容保留安全邊界、不要貼近畫面邊緣、簡單循環動作、${motionZh}、可愛Q版貼圖風格、乾淨描邊、角色一致性穩定、文字保持不變、人物造型保持不變、所有內容四周至少保留10px安全邊界。
+LINE動態貼圖風格、方形構圖、中近景、單一角色、角色在每格固定佔畫面70%，執行「${motionZh}」的小幅度循環動作。所有影格使用固定鏡頭、完全相同的構圖、裁切範圍、縮放比例與透視。以軀幹中心為固定錨點，每格必須位於完全相同的座標；腳底基準線、頭頂高度與角色外框必須對齊。禁止整個角色左右漂移、上下跳動、忽大忽小、旋轉、縮放或重新構圖。只有完成動作所需的局部肢體或五官可以小幅逐格變化，其餘部位保持固定；相鄰影格的變化量必須微小且均勻。文字視為固定圖層，每格的文字內容、字形、大小、角度與座標完全一致。影格疊放時軀幹與文字必須精準重合。不要切到頭和手，四周保留至少10px安全邊界，可愛Q版貼圖風格、乾淨描邊、角色一致性穩定。
 `;
 
   document.getElementById("output").value = prompt;
