@@ -671,8 +671,9 @@ function generateMotionPrompt(){
 共6格連續動作，
 依照「${motion}」動作進行拆解。
 六格必須使用完全相同大小的畫格與相同裁切範圍。
-背景請使用乾淨淺灰色背景，
-方便後續去背處理。
+六格都必須使用真正的透明背景（透明 Alpha channel），直接輸出帶透明背景的 PNG。
+背景必須完全透明，不要白底、灰底、彩色底、漸層、場景、陰影底板或棋盤格圖案。
+角色、文字與外框邊緣必須完整清楚，不可因透明背景而出現白邊、灰邊、破洞或半透明缺口。
 不要格線
 不要編號
 每格保留間距方便裁切
@@ -732,9 +733,9 @@ document.getElementById("canvaMotion").selectedIndex
 ].text;
 
   const prompt = `
-LINE animated sticker style, square composition, medium close-up, large character occupying exactly 70% of every frame, single character, minimal movement, simple seamless looping motion: ${motion}. Use a locked camera, identical framing, identical crop, identical scale and identical perspective in every frame. Fix the torso center to the exact same x/y coordinates in every frame. Align the feet baseline, top of head and character bounding box across all frames. No whole-character translation, no camera movement, no zoom, no rotation, no size fluctuation and no reframing. Only the body parts required for the selected motion may change slightly; all other parts must remain fixed. Adjacent frames must have small, evenly spaced changes. Treat all text as a fixed overlay: identical text, font, size, angle and x/y position in every frame. When the frames are stacked, the torso and text must overlap exactly. Do not crop the head or hands, keep safe margins around all content, cute chibi sticker style, clean outline, stable character consistency.
+LINE animated sticker style, square composition, medium close-up, large character occupying exactly 70% of every frame, single character, minimal movement, simple seamless looping motion: ${motion}. Use a true transparent background with an alpha channel and export as transparent PNG. No white, gray or colored background, no scenery, no background shadow, and no checkerboard pattern. Keep clean solid edges without white halos, gray fringes, holes or damaged semi-transparent outlines. Use a locked camera, identical framing, identical crop, identical scale and identical perspective in every frame. Fix the torso center to the exact same x/y coordinates in every frame. Align the feet baseline, top of head and character bounding box across all frames. No whole-character translation, no camera movement, no zoom, no rotation, no size fluctuation and no reframing. Only the body parts required for the selected motion may change slightly; all other parts must remain fixed. Adjacent frames must have small, evenly spaced changes. Treat all text as a fixed overlay: identical text, font, size, angle and x/y position in every frame. When the frames are stacked, the torso and text must overlap exactly. Do not crop the head or hands, keep safe margins around all content, cute chibi sticker style, clean outline, stable character consistency.
 
-LINE動態貼圖風格、方形構圖、中近景、單一角色、角色在每格固定佔畫面70%，執行「${motionZh}」的小幅度循環動作。所有影格使用固定鏡頭、完全相同的構圖、裁切範圍、縮放比例與透視。以軀幹中心為固定錨點，每格必須位於完全相同的座標；腳底基準線、頭頂高度與角色外框必須對齊。禁止整個角色左右漂移、上下跳動、忽大忽小、旋轉、縮放或重新構圖。只有完成動作所需的局部肢體或五官可以小幅逐格變化，其餘部位保持固定；相鄰影格的變化量必須微小且均勻。文字視為固定圖層，每格的文字內容、字形、大小、角度與座標完全一致。影格疊放時軀幹與文字必須精準重合。不要切到頭和手，四周保留至少10px安全邊界，可愛Q版貼圖風格、乾淨描邊、角色一致性穩定。
+LINE動態貼圖風格、方形構圖、中近景、單一角色、角色在每格固定佔畫面70%，執行「${motionZh}」的小幅度循環動作。使用真正含 Alpha channel 的透明背景並輸出透明 PNG；禁止白底、灰底、彩色底、場景、背景陰影及棋盤格圖案。角色、文字和外框邊緣必須完整清楚，不可有白邊、灰邊、破洞或半透明缺口。所有影格使用固定鏡頭、完全相同的構圖、裁切範圍、縮放比例與透視。以軀幹中心為固定錨點，每格必須位於完全相同的座標；腳底基準線、頭頂高度與角色外框必須對齊。禁止整個角色左右漂移、上下跳動、忽大忽小、旋轉、縮放或重新構圖。只有完成動作所需的局部肢體或五官可以小幅逐格變化，其餘部位保持固定；相鄰影格的變化量必須微小且均勻。文字視為固定圖層，每格的文字內容、字形、大小、角度與座標完全一致。影格疊放時軀幹與文字必須精準重合。不要切到頭和手，四周保留至少10px安全邊界，可愛Q版貼圖風格、乾淨描邊、角色一致性穩定。
 `;
 
   document.getElementById("output").value = prompt;
