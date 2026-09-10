@@ -238,9 +238,12 @@ button{
   }
 }
 </style>
+<link rel="stylesheet" href="site.css">
+<meta name="description" content="簡老師電腦基礎練習站：適合初學者的滑鼠操作與中文打字練習，大字介面、注音與語音輔助。">
 </head>
 
 <body>
+<a class="skip-link" href="#main-content">跳到練習內容</a>
 
 <header>
   <div class="header-left">
@@ -257,34 +260,14 @@ button{
       滑鼠、打字、電腦操作，第一次學也沒關係
     </p>
 
-    <div class="teacher-info">
-      <div>📱 LINE ID：@301FTLVT（記得加 @）</div>
-
-      <div>
-        ☎️ 手機：
-        <a href="tel:0918256089">0918-256-089</a>
-      </div>
-
-      <div>🏠 地址：新北市板橋區明德街8號2樓</div>
-
-      <div style="margin-top:10px;">
-        <a href="https://lin.ee/wXZLYUdp" target="_blank">
-          <img src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
-               alt="加入好友" height="44">
-        </a>
-      </div>
-
-      <div style="font-size:16px;margin-top:6px;color:#cbd5e1;">
-        💬 加入後請丟個貼圖或打「+1」喔 😊
-      </div>
-    </div>
 
   </div>
 
   <div class="version">
     V1.0 初學友善版
   </div>
-</header>
+<nav class="site-nav" aria-label="主要導覽"><a href="index.html">練習首頁</a><a href="mouse-game.html">滑鼠練習</a><a href="typing-test.html" aria-current="page">中文打字</a></nav></header>
+<main id="main-content">
 
 <div class="page-title">
   ⌨️ 中文生活打字練習
@@ -295,6 +278,20 @@ button{
   打對後會自動換下一題，限時一分鐘
 </div>
 
+<div class="practice-options">
+  <label for="practiceMode">選擇練習內容</label>
+  <select id="practiceMode" aria-describedby="modeHelp">
+    <option value="words">生活詞語</option>
+    <option value="punctuation">標點符號（附名稱與注音）</option>
+    <option value="sentences">短句與標點</option>
+    <option value="mixed">全部混合</option>
+  </select>
+  <p id="modeHelp"></p>
+  <label class="sound-setting" for="endSound"><input id="endSound" type="checkbox" checked> 時間到播放提示音</label>
+  <p id="endSoundStatus" role="status"></p>
+  <p>練習中若要更換內容，請先按「重新開始」。</p>
+</div>
+
 <div class="info">
   <div class="card">
     <div class="label">剩餘時間</div>
@@ -302,7 +299,7 @@ button{
   </div>
 
   <div class="card">
-    <div class="label">打對字數</div>
+    <div class="label">打對字元</div>
     <div class="value" id="charCount">0</div>
   </div>
 
@@ -315,8 +312,10 @@ button{
 <div class="practice-box">
   <div class="word" id="word">準備開始</div>
   <div class="bopomofo" id="bopomofo">按下開始練習</div>
+  <p id="questionHint" class="question-hint">請輸入與題目相同的文字，答對後自動換題。</p>
 
-  <input id="typingInput" type="text" placeholder="請在這裡打字" disabled>
+  <label class="input-label" for="typingInput">切換中文輸入法，輸入上方題目</label>
+  <input autocomplete="off" spellcheck="false" aria-describedby="bopomofo questionHint" id="typingInput" type="text" placeholder="請在這裡打字" disabled>
 </div>
 
 <div class="btn-area">
@@ -325,12 +324,36 @@ button{
   <button class="resetBtn" id="resetBtn">重新開始</button>
 </div>
 
+<div id="result" class="result" role="status" aria-live="polite" hidden></div>
+</main>
+    <div class="teacher-info">
+      <div>📱 LINE ID：@301FTLVT（記得加 @）</div>
+
+      <div>
+        ☎️ 手機：
+        <a href="tel:0918256089">0918-256-089</a>
+      </div>
+
+      <div>🏠 地址：新北市板橋區明德街8號2樓</div>
+
+      <div style="margin-top:10px;">
+        <a href="https://lin.ee/wXZLYUdp" target="_blank" rel="noopener noreferrer">
+          <img src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
+               alt="加入好友" height="44">
+        </a>
+      </div>
+
+      <div style="font-size:16px;margin-top:6px;color:#cbd5e1;">
+        💬 加入後請丟個貼圖或打「+1」喔 😊
+      </div>
+    </div>
+
 <div class="message">
   💚 我們不用很厲害才開始<br>
   💚 只要開始就很厲害
 </div>
 
-<a href="https://lin.ee/wXZLYUdp" target="_blank" class="float-line">
+<a href="https://lin.ee/wXZLYUdp" target="_blank" rel="noopener noreferrer" class="float-line">
   💬 LINE
 </a>
 
@@ -435,175 +458,98 @@ const words = [
   {word:"練習",bopomofo:"ㄌㄧㄢˋ ㄒㄧˊ"},
   {word:"成功",bopomofo:"ㄔㄥˊ ㄍㄨㄥ"},
   {word:"進步",bopomofo:"ㄐㄧㄣˋ ㄅㄨˋ"},
-  {word:"開始",bopomofo:"ㄎㄞ ㄕˇ"}
+  {word:"開始",bopomofo:"ㄎㄞ ㄕˇ"},
+  {word:"電腦",bopomofo:"ㄉㄧㄢˋ ㄋㄠˇ"},
+  {word:"滑鼠",bopomofo:"ㄏㄨㄚˊ ㄕㄨˇ"},
+  {word:"鍵盤",bopomofo:"ㄐㄧㄢˋ ㄆㄢˊ"},
+  {word:"螢幕",bopomofo:"ㄧㄥˊ ㄇㄨˋ"},
+  {word:"網路",bopomofo:"ㄨㄤˇ ㄌㄨˋ"},
+  {word:"網頁",bopomofo:"ㄨㄤˇ ㄧㄝˋ"},
+  {word:"檔案",bopomofo:"ㄉㄤˇ ㄢˋ"},
+  {word:"資料",bopomofo:"ㄗ ㄌㄧㄠˋ"},
+  {word:"儲存",bopomofo:"ㄔㄨˊ ㄘㄨㄣˊ"},
+  {word:"列印",bopomofo:"ㄌㄧㄝˋ ㄧㄣˋ"},
+  {word:"複製",bopomofo:"ㄈㄨˋ ㄓˋ"},
+  {word:"貼上",bopomofo:"ㄊㄧㄝ ㄕㄤˋ"},
+  {word:"刪除",bopomofo:"ㄕㄢ ㄔㄨˊ"},
+  {word:"搜尋",bopomofo:"ㄙㄡ ㄒㄩㄣˊ"},
+  {word:"下載",bopomofo:"ㄒㄧㄚˋ ㄗㄞˋ"},
+  {word:"上傳",bopomofo:"ㄕㄤˋ ㄔㄨㄢˊ"},
+  {word:"帳號",bopomofo:"ㄓㄤˋ ㄏㄠˋ"},
+  {word:"密碼",bopomofo:"ㄇㄧˋ ㄇㄚˇ"},
+  {word:"輸入",bopomofo:"ㄕㄨ ㄖㄨˋ"},
+  {word:"視窗",bopomofo:"ㄕˋ ㄔㄨㄤ"},
+  {word:"公車",bopomofo:"ㄍㄨㄥ ㄔㄜ"},
+  {word:"火車",bopomofo:"ㄏㄨㄛˇ ㄔㄜ"},
+  {word:"高鐵",bopomofo:"ㄍㄠ ㄊㄧㄝˇ"},
+  {word:"飛機",bopomofo:"ㄈㄟ ㄐㄧ"},
+  {word:"機場",bopomofo:"ㄐㄧ ㄔㄤˇ"},
+  {word:"車票",bopomofo:"ㄔㄜ ㄆㄧㄠˋ"},
+  {word:"地圖",bopomofo:"ㄉㄧˋ ㄊㄨˊ"},
+  {word:"路口",bopomofo:"ㄌㄨˋ ㄎㄡˇ"},
+  {word:"左邊",bopomofo:"ㄗㄨㄛˇ ㄅㄧㄢ"},
+  {word:"右邊",bopomofo:"ㄧㄡˋ ㄅㄧㄢ"},
+  {word:"直走",bopomofo:"ㄓˊ ㄗㄡˇ"},
+  {word:"附近",bopomofo:"ㄈㄨˋ ㄐㄧㄣˋ"},
+  {word:"郵局",bopomofo:"ㄧㄡˊ ㄐㄩˊ"},
+  {word:"商店",bopomofo:"ㄕㄤ ㄉㄧㄢˋ"},
+  {word:"書店",bopomofo:"ㄕㄨ ㄉㄧㄢˋ"},
+  {word:"麵店",bopomofo:"ㄇㄧㄢˋ ㄉㄧㄢˋ"},
+  {word:"水果",bopomofo:"ㄕㄨㄟˇ ㄍㄨㄛˇ"},
+  {word:"蔬菜",bopomofo:"ㄕㄨ ㄘㄞˋ"},
+  {word:"牛奶",bopomofo:"ㄋㄧㄡˊ ㄋㄞˇ"},
+  {word:"雞蛋",bopomofo:"ㄐㄧ ㄉㄢˋ"},
+  {word:"白飯",bopomofo:"ㄅㄞˊ ㄈㄢˋ"},
+  {word:"水餃",bopomofo:"ㄕㄨㄟˇ ㄐㄧㄠˇ"},
+  {word:"湯匙",bopomofo:"ㄊㄤ ㄔˊ"},
+  {word:"筷子",bopomofo:"ㄎㄨㄞˋ ˙ㄗ"},
+  {word:"盤子",bopomofo:"ㄆㄢˊ ˙ㄗ"},
+  {word:"毛巾",bopomofo:"ㄇㄠˊ ㄐㄧㄣ"},
+  {word:"牙刷",bopomofo:"ㄧㄚˊ ㄕㄨㄚ"},
+  {word:"牙膏",bopomofo:"ㄧㄚˊ ㄍㄠ"},
+  {word:"肥皂",bopomofo:"ㄈㄟˊ ㄗㄠˋ"},
+  {word:"棉被",bopomofo:"ㄇㄧㄢˊ ㄅㄟˋ"},
+  {word:"枕頭",bopomofo:"ㄓㄣˇ ˙ㄊㄡ"},
+  {word:"陽台",bopomofo:"ㄧㄤˊ ㄊㄞˊ"},
+  {word:"門口",bopomofo:"ㄇㄣˊ ㄎㄡˇ"},
+  {word:"樓梯",bopomofo:"ㄌㄡˊ ㄊㄧ"},
+  {word:"電梯",bopomofo:"ㄉㄧㄢˋ ㄊㄧ"},
+  {word:"今天",bopomofo:"ㄐㄧㄣ ㄊㄧㄢ"},
+  {word:"明天",bopomofo:"ㄇㄧㄥˊ ㄊㄧㄢ"},
+  {word:"昨天",bopomofo:"ㄗㄨㄛˊ ㄊㄧㄢ"},
+  {word:"上午",bopomofo:"ㄕㄤˋ ㄨˇ"},
+  {word:"下午",bopomofo:"ㄒㄧㄚˋ ㄨˇ"}
 ];
 
-const timerEl = document.getElementById("timer");
-const charCountEl = document.getElementById("charCount");
-const wordCountEl = document.getElementById("wordCount");
-const wordEl = document.getElementById("word");
-const bopomofoEl = document.getElementById("bopomofo");
-const typingInput = document.getElementById("typingInput");
-const startBtn = document.getElementById("startBtn");
-const soundBtn = document.getElementById("soundBtn");
-const resetBtn = document.getElementById("resetBtn");
+const punctuation = [
+  {word:"，",name:"逗號",bopomofo:"ㄉㄡˋ ㄏㄠˋ"},
+  {word:"。",name:"句號",bopomofo:"ㄐㄩˋ ㄏㄠˋ"},
+  {word:"？",name:"問號",bopomofo:"ㄨㄣˋ ㄏㄠˋ"},
+  {word:"！",name:"驚嘆號",bopomofo:"ㄐㄧㄥ ㄊㄢˋ ㄏㄠˋ"},
+  {word:"、",name:"頓號",bopomofo:"ㄉㄨㄣˋ ㄏㄠˋ"},
+  {word:"：",name:"冒號",bopomofo:"ㄇㄠˋ ㄏㄠˋ"},
+  {word:"；",name:"分號",bopomofo:"ㄈㄣ ㄏㄠˋ"},
+  {word:"「",name:"左引號",bopomofo:"ㄗㄨㄛˇ ㄧㄣˇ ㄏㄠˋ"},
+  {word:"」",name:"右引號",bopomofo:"ㄧㄡˋ ㄧㄣˇ ㄏㄠˋ"},
+  {word:"（",name:"左括號",bopomofo:"ㄗㄨㄛˇ ㄍㄨㄚ ㄏㄠˋ"},
+  {word:"）",name:"右括號",bopomofo:"ㄧㄡˋ ㄍㄨㄚ ㄏㄠˋ"},
+  {word:"……",name:"刪節號",bopomofo:"ㄕㄢ ㄐㄧㄝˊ ㄏㄠˋ",hint:"請輸入兩個「…」，不是六個英文句點。"}
+];
+const sentences = [
+  {word:"你好！",bopomofo:"ㄋㄧˇ ㄏㄠˇ！"},
+  {word:"謝謝老師。",bopomofo:"ㄒㄧㄝˋ ㄒㄧㄝˋ ㄌㄠˇ ㄕ。"},
+  {word:"你好嗎？",bopomofo:"ㄋㄧˇ ㄏㄠˇ ˙ㄇㄚ？"},
+  {word:"早安，朋友！",bopomofo:"ㄗㄠˇ ㄢ，ㄆㄥˊ ㄧㄡˇ！"},
+  {word:"今天去公園。",bopomofo:"ㄐㄧㄣ ㄊㄧㄢ ㄑㄩˋ ㄍㄨㄥ ㄩㄢˊ。"},
+  {word:"我愛學電腦。",bopomofo:"ㄨㄛˇ ㄞˋ ㄒㄩㄝˊ ㄉㄧㄢˋ ㄋㄠˇ。"},
+  {word:"請問，車站在哪裡？",bopomofo:"ㄑㄧㄥˇ ㄨㄣˋ，ㄔㄜ ㄓㄢˋ ㄗㄞˋ ㄋㄚˇ ㄌㄧˇ？"},
+  {word:"蘋果、香蕉、葡萄。",bopomofo:"ㄆㄧㄥˊ ㄍㄨㄛˇ、ㄒㄧㄤ ㄐㄧㄠ、ㄆㄨˊ ㄊㄠˊ。"},
+  {word:"老師說：「加油！」",bopomofo:"ㄌㄠˇ ㄕ ㄕㄨㄛ：「ㄐㄧㄚ ㄧㄡˊ！」"},
+  {word:"慢慢來，沒關係。",bopomofo:"ㄇㄢˋ ㄇㄢˋ ㄌㄞˊ，ㄇㄟˊ ㄍㄨㄢ ㄒㄧˋ。"}
+];
 
-let currentWord = null;
-let time = 60;
-let charCount = 0;
-let wordCount = 0;
-let timerInterval = null;
-let playing = false;
-
-function pickWord(){
-
-  currentWord = words[Math.floor(Math.random() * words.length)];
-
-  wordEl.textContent = currentWord.word;
-  bopomofoEl.textContent = currentWord.bopomofo;
-
-  typingInput.blur();
-
-  setTimeout(()=>{
-
-      typingInput.value = "";
-      typingInput.focus();
-
-  },50);
-
-}
-
-function speakWord(){
-  if(!currentWord) return;
-
-  window.speechSynthesis.cancel();
-
-  const speech = new SpeechSynthesisUtterance(currentWord.word);
-  speech.lang = "zh-TW";
-  speech.rate = 0.8;
-  speech.pitch = 1;
-
-  window.speechSynthesis.speak(speech);
-}
-
-function getRank(count){
-  if(count >= 90) return 98;
-  if(count >= 75) return 92;
-  if(count >= 60) return 86;
-  if(count >= 45) return 78;
-  if(count >= 30) return 68;
-  if(count >= 20) return 58;
-  if(count >= 10) return 48;
-  return 35;
-}
-
-function getPraise(count){
-  if(count >= 90) return "太厲害了！您的打字速度很有感覺！";
-  if(count >= 75) return "非常棒！鍵盤越來越熟悉了！";
-  if(count >= 60) return "很不錯喔！已經進入穩定練習狀態！";
-  if(count >= 45) return "有進步！每天一分鐘會越來越順手！";
-  if(count >= 30) return "很好，願意開始就是很棒的練習！";
-  return "慢慢來沒關係，今天已經成功開始了！";
-}
-
-function finishGame(){
-  playing = false;
-  clearInterval(timerInterval);
-  typingInput.disabled = true;
-
-  const rank = getRank(charCount);
-  const praise = getPraise(charCount);
-
-  alert(
-    "🎉 恭喜完成一分鐘練習！\n\n" +
-    "本次打對：" + charCount + " 個字\n" +
-    "完成題數：" + wordCount + " 題\n" +
-    "贏過 " + rank + "% 的練習者！\n\n" +
-    praise + "\n\n" +
-    "💚 我們不用很厲害才開始，\n" +
-    "只要開始就很厲害！"
-  );
-}
-
-function startGame(){
-  time = 60;
-  charCount = 0;
-  wordCount = 0;
-  playing = true;
-
-  timerEl.textContent = time;
-  charCountEl.textContent = charCount;
-  wordCountEl.textContent = wordCount;
-
-  typingInput.disabled = false;
-  pickWord();
-  speakWord();
-
-  clearInterval(timerInterval);
-
-  timerInterval = setInterval(function(){
-    time--;
-    timerEl.textContent = time;
-
-    if(time <= 0){
-      finishGame();
-    }
-  }, 1000);
-}
-
-function resetGame(){
-  playing = false;
-  clearInterval(timerInterval);
-  window.speechSynthesis.cancel();
-
-  time = 60;
-  charCount = 0;
-  wordCount = 0;
-
-  timerEl.textContent = 60;
-  charCountEl.textContent = 0;
-  wordCountEl.textContent = 0;
-
-  wordEl.textContent = "準備開始";
-  bopomofoEl.textContent = "按下開始練習";
-
-  typingInput.value = "";
-  typingInput.disabled = true;
-}
-
-typingInput.addEventListener("keydown", function(e){
-
-  if(!playing || !currentWord) return;
-
-  if(e.key !== "Enter") return;
-
-  const typedText = typingInput.value.trim();
-
-  if(typedText === currentWord.word){
-
-    charCount += currentWord.word.length;
-    wordCount++;
-
-    charCountEl.textContent = charCount;
-    wordCountEl.textContent = wordCount;
-
-    pickWord();
-    speakWord();
-
-  }else{
-
-    alert("再試一次喔 😊");
-
-  }
-
-});
-
-
-
-startBtn.addEventListener("click", startGame);
-resetBtn.addEventListener("click", resetGame);
-soundBtn.addEventListener("click", speakWord);
 </script>
+<script src="typing.js"></script>
 
 </body>
 </html>
