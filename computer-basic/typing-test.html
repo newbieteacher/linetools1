@@ -321,6 +321,7 @@ button{
 <div class="btn-area">
   <button class="startBtn" id="startBtn">開始練習</button>
   <button class="soundBtn" id="soundBtn">🔊 唸給我聽</button>
+  <button class="resetBtn" id="skipBtn" disabled>跳過這題</button>
   <button class="resetBtn" id="resetBtn">重新開始</button>
 </div>
 
@@ -532,8 +533,7 @@ const punctuation = [
   {word:"「",name:"左引號",bopomofo:"ㄗㄨㄛˇ ㄧㄣˇ ㄏㄠˋ"},
   {word:"」",name:"右引號",bopomofo:"ㄧㄡˋ ㄧㄣˇ ㄏㄠˋ"},
   {word:"（",name:"左括號",bopomofo:"ㄗㄨㄛˇ ㄍㄨㄚ ㄏㄠˋ"},
-  {word:"）",name:"右括號",bopomofo:"ㄧㄡˋ ㄍㄨㄚ ㄏㄠˋ"},
-  {word:"……",name:"刪節號",bopomofo:"ㄕㄢ ㄐㄧㄝˊ ㄏㄠˋ",hint:"請輸入兩個「…」，不是六個英文句點。"}
+  {word:"）",name:"右括號",bopomofo:"ㄧㄡˋ ㄍㄨㄚ ㄏㄠˋ"}
 ];
 const sentences = [
   {word:"你好！",bopomofo:"ㄋㄧˇ ㄏㄠˇ！"},
